@@ -144,7 +144,8 @@ namespace Library.Collections
             if (count == 0)
                 return ReadOnlySpan<Vector2Int>.Empty;
 
-            return new ReadOnlySpan<Vector2Int>(span.Slice(0, count).ToArray());
+            var arr = span.Slice(0, count).ToArray();
+            return new ReadOnlySpan<Vector2Int>(arr);
         }
         
         /// <summary>
@@ -230,12 +231,16 @@ namespace Library.Collections
             }
 
             var nDirections = n.GetDirections();
-            count = nDirections.Length;
-            for (int i = 0; i < nDirections.Length; i++)
+            foreach (var direction in nDirections)
             {
-                var neighbourPosition = position + nDirections[i];
-                Assert.IsTrue(ContainsAt(neighbourPosition));
-                neighbours[i] = neighbourPosition;
+                var neighbourPosition = position + direction;
+                if (!ContainsAt(neighbourPosition))
+                {
+                    Assert.IsFalse(connectedOnly);
+                    continue;
+                }
+                neighbours[count] = neighbourPosition;
+                count++;
             }
         }
     }
