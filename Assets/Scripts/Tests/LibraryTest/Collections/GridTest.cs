@@ -48,11 +48,11 @@ public class GridTest
         grid.Add(thirdPosition, thirdValue);
         
         grid.Connect(secondPosition, NodeConnections.Right);
-        Assert.That(grid.GetNeighbours(thirdPosition).ToArray(), Is.EquivalentTo(new [] { secondPosition }));
+        Assert.That(grid.GetConnectedNeighbours(thirdPosition).ToArray(), Is.EquivalentTo(new [] { secondPosition }));
 
         grid.Remove(secondPosition);
         
-        Assert.That(grid.GetNeighbours(thirdPosition).ToArray(), Is.EquivalentTo( Array.Empty<Vector2Int>() ));
+        Assert.That(grid.GetConnectedNeighbours(thirdPosition).ToArray(), Is.EquivalentTo( Array.Empty<Vector2Int>() ));
     }
 
     [Test]
@@ -72,18 +72,18 @@ public class GridTest
         grid.Connect(position, NodeConnections.Up);
         grid.Connect(position, NodeConnections.Right | NodeConnections.Down);
         
-        Assert.That(grid.GetNeighbourValues(position).ToArray(), Is.EquivalentTo(new [] {1, 3, 5}));
+        Assert.That(grid.GetConnectedNeighbourValues(position).ToArray(), Is.EquivalentTo(new [] {1, 3, 5}));
 
         bool bResult = grid.TryConnectAny(new Vector2Int(1, 0), NodeConnections.Right);
         Assert.False(bResult);
         
         grid.Disconnect(position, NodeConnections.Up);
         
-        Assert.That(grid.GetNeighbourValues(position).ToArray(), Is.EquivalentTo(new [] {3, 5}));
+        Assert.That(grid.GetConnectedNeighbourValues(position).ToArray(), Is.EquivalentTo(new [] {3, 5}));
         
         grid.Disconnect(position, NodeConnections.Right | NodeConnections.Down);
         
-        Assert.That(grid.GetNeighbourValues(position).ToArray(), Is.EquivalentTo( Array.Empty<int>()));
+        Assert.That(grid.GetConnectedNeighbourValues(position).ToArray(), Is.EquivalentTo( Array.Empty<int>()));
         
         bResult = grid.TryDisconnect(new Vector2Int(1, 0), NodeConnections.Right);
         Assert.False(bResult);
@@ -105,11 +105,11 @@ public class GridTest
         
         grid.Connect(position, NodeConnections.Up | NodeConnections.Right | NodeConnections.Down);
         
-        Assert.That(grid.GetNeighbourValues(position, NodeConnections.Up).ToArray(), Is.EquivalentTo(new [] {1}));
+        Assert.That(grid.GetConnectedNeighbourValues(position, NodeConnections.Up).ToArray(), Is.EquivalentTo(new [] {1}));
         grid.Remove(new Vector2Int(0, 1));
-        Assert.That(grid.GetNeighbourValues(position).ToArray(), Is.EquivalentTo(new [] {3, 5}));
+        Assert.That(grid.GetConnectedNeighbourValues(position).ToArray(), Is.EquivalentTo(new [] {3, 5}));
         
         grid.Connect(new Vector2Int(1, 0), NodeConnections.Down | NodeConnections.Up);
-        Assert.That(grid.GetNeighbourValues(new Vector2Int(1, 0), NodeConnections.Down | NodeConnections.Up).ToArray(), Is.EquivalentTo(new [] {2, 4}));
+        Assert.That(grid.GetConnectedNeighbourValues(new Vector2Int(1, 0), NodeConnections.Down | NodeConnections.Up).ToArray(), Is.EquivalentTo(new [] {2, 4}));
     }
 }

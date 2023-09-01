@@ -104,11 +104,11 @@ namespace Library.Collections
         /// <summary>
         /// Return all available requested neighbours
         /// </summary>
-        public ReadOnlySpan<Vector2Int> GetNeighbours(Vector2Int position,
-            NodeConnections connectionses = NodeConnectionsExtension.AllDirections)
+        public ReadOnlySpan<Vector2Int> GetConnectedNeighbours(Vector2Int position,
+            NodeConnections connections = NodeConnectionsExtension.AllDirections)
         {
             Span<Vector2Int> span = stackalloc Vector2Int[4];
-            GetNeighboursInternal(position, span, connectionses, out int count);
+            GetNeighboursInternal(position, span, connections, true, out int count);
 
             if (count == 0)
                 return ReadOnlySpan<Vector2Int>.Empty;
@@ -116,11 +116,13 @@ namespace Library.Collections
             return new ReadOnlySpan<Vector2Int>(span.Slice(0, count).ToArray());
         }
 
-
-        public ReadOnlySpan<T> GetNeighbourValues(Vector2Int position,
-            NodeConnections connectionses = NodeConnectionsExtension.AllDirections)
+        /// <summary>
+        /// Returns values right away
+        /// </summary>
+        public ReadOnlySpan<T> GetConnectedNeighbourValues(Vector2Int position,
+            NodeConnections connections = NodeConnectionsExtension.AllDirections)
         {
-            var neighboursPosition = GetNeighbours(position, connectionses);
+            var neighboursPosition = GetConnectedNeighbours(position, connections);
             var array = new T[neighboursPosition.Length];
 
             for (int i = 0; i < neighboursPosition.Length; i++)
@@ -130,6 +132,38 @@ namespace Library.Collections
 
             return new ReadOnlySpan<T>(array);
         }
+        
+        /// <summary>
+        /// Return all available neighbours even if they are not connected
+        /// </summary>
+        public ReadOnlySpan<Vector2Int> GetNeighbours(Vector2Int position, NodeConnections connections = NodeConnectionsExtension.AllDirections)
+        {
+            Span<Vector2Int> span = stackalloc Vector2Int[4];
+            GetNeighboursInternal(position, span, connections, false, out int count);
+
+            if (count == 0)
+                return ReadOnlySpan<Vector2Int>.Empty;
+
+            return new ReadOnlySpan<Vector2Int>(span.Slice(0, count).ToArray());
+        }
+        
+        /// <summary>
+        /// Returns values right away
+        /// </summary>
+        public ReadOnlySpan<T> GetNeighbourValues(Vector2Int position,
+            NodeConnections connections = NodeConnectionsExtension.AllDirections)
+        {
+            var neighboursPosition = GetNeighbours(position, connections);
+            var array = new T[neighboursPosition.Length];
+
+            for (int i = 0; i < neighboursPosition.Length; i++)
+            {
+                array[i] = Get(neighboursPosition[i]);
+            }
+
+            return new ReadOnlySpan<T>(array);
+        }
+
 
         private void ConnectInternal(Vector2Int position, ReadOnlySpan<NodeConnections> neighbourConnections,
             out int connectedNodes)
@@ -180,16 +214,20 @@ namespace Library.Collections
         }
 
         private void GetNeighboursInternal(Vector2Int position, Span<Vector2Int> neighbours,
-            NodeConnections connections, out int count)
+            NodeConnections connections, bool connectedOnly, out int count)
         {
             count = 0;
 
             if (!ContainsAt(position) || neighbours.Length != 4)
                 return;
-
-            var n = _connections[position] & connections;
-            if (n == NodeConnections.None)
-                return;
+            
+            var n = connections;
+            if (connectedOnly)
+            {
+                n &= _connections[position];
+                if (n == NodeConnections.None)
+                    return;   
+            }
 
             var nDirections = n.GetDirections();
             count = nDirections.Length;
@@ -199,112 +237,6 @@ namespace Library.Collections
                 Assert.IsTrue(ContainsAt(neighbourPosition));
                 neighbours[i] = neighbourPosition;
             }
-        }
-    }
-
-    [Flags]
-    public enum NodeConnections
-    {
-        None = 0,
-        Up = 1,
-        Right = 2,
-        Down = 4,
-        Left = 8
-    }
-
-    public static class NodeConnectionsExtension
-    {
-        public const NodeConnections AllDirections =
-            NodeConnections.Up | NodeConnections.Right | NodeConnections.Down | NodeConnections.Left;
-
-        public const NodeConnections Vertical =
-            NodeConnections.Up | NodeConnections.Down;
-
-        public const NodeConnections Horizontal =
-            NodeConnections.Right | NodeConnections.Left;
-
-        public static bool IsSingular(this NodeConnections nodeConnections) => nodeConnections switch
-        {
-            NodeConnections.Up => true,
-            NodeConnections.Right => true,
-            NodeConnections.Down => true,
-            NodeConnections.Left => true,
-            _ => false
-        };
-
-        public static Vector2Int GetDirection(this NodeConnections connections) => connections switch
-        {
-            NodeConnections.Up => Vector2Int.up,
-            NodeConnections.Right => Vector2Int.right,
-            NodeConnections.Down => Vector2Int.down,
-            NodeConnections.Left => Vector2Int.left,
-            _ => throw new ArgumentException("Unknown direction: " + connections)
-        };
-
-        public static ReadOnlySpan<Vector2Int> GetDirections(this NodeConnections connections)
-        {
-            var singleConnections = Split(connections);
-            var directions = new Vector2Int[singleConnections.Length];
-            for (int i = 0; i < singleConnections.Length; i++)
-            {
-                directions[i] = singleConnections[i].GetDirection();
-            }
-
-            return new ReadOnlySpan<Vector2Int>(directions);
-        }
-
-        public static ReadOnlySpan<NodeConnections> Split(this NodeConnections connections) => connections switch
-        {
-            NodeConnections.Up => new[] { NodeConnections.Up },
-            NodeConnections.Right => new[] { NodeConnections.Right },
-            NodeConnections.Down => new[] { NodeConnections.Down },
-            NodeConnections.Left => new[] { NodeConnections.Left },
-
-            NodeConnections.Up | NodeConnections.Right => new[] { NodeConnections.Up, NodeConnections.Right },
-            NodeConnections.Up | NodeConnections.Down => new[] { NodeConnections.Up, NodeConnections.Down },
-            NodeConnections.Up | NodeConnections.Left => new[] { NodeConnections.Up, NodeConnections.Left },
-            NodeConnections.Right | NodeConnections.Down => new[] { NodeConnections.Right, NodeConnections.Down },
-            NodeConnections.Right | NodeConnections.Left => new[] { NodeConnections.Right, NodeConnections.Left },
-            NodeConnections.Down | NodeConnections.Left => new[] { NodeConnections.Down, NodeConnections.Left },
-
-            NodeConnections.Up | NodeConnections.Right | NodeConnections.Down => new[]
-                { NodeConnections.Up, NodeConnections.Right, NodeConnections.Down },
-            NodeConnections.Up | NodeConnections.Right | NodeConnections.Left => new[]
-                { NodeConnections.Up, NodeConnections.Right, NodeConnections.Left },
-            NodeConnections.Up | NodeConnections.Down | NodeConnections.Left => new[]
-                { NodeConnections.Up, NodeConnections.Down, NodeConnections.Left },
-            NodeConnections.Right | NodeConnections.Down | NodeConnections.Left => new[]
-                { NodeConnections.Right, NodeConnections.Down, NodeConnections.Left },
-
-            AllDirections => new[]
-                { NodeConnections.Up, NodeConnections.Right, NodeConnections.Down, NodeConnections.Left },
-            _ => throw new ArgumentException("Unknown direction: " + connections)
-        };
-
-        public static NodeConnections Invert(this NodeConnections connections) => connections switch
-        {
-            NodeConnections.Up => NodeConnections.Down,
-            NodeConnections.Right => NodeConnections.Left,
-            NodeConnections.Down => NodeConnections.Up,
-            NodeConnections.Left => NodeConnections.Right,
-            _ => throw new ArgumentException("Unable to invert combined direction: " + connections)
-        };
-
-        public static NodeConnections ToSingleNodeConnection(this Vector2Int direction)
-        {
-            if (direction.Equals(Vector2Int.up))
-                return NodeConnections.Up;
-
-            if (direction.Equals(Vector2Int.right))
-                return NodeConnections.Right;
-
-            if (direction.Equals(Vector2Int.down))
-                return NodeConnections.Down;
-
-            if (direction.Equals(Vector2Int.left))
-                return NodeConnections.Left;
-
-            throw new AggregateException("Unknown direction");
         }
     }
 }
