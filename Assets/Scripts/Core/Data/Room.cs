@@ -1,17 +1,30 @@
+using System;
 using Library.Collections;
 using UnityEngine;
 
 namespace Core.Data
 {
-    public readonly struct Room
+    [Serializable]
+    public struct Room
     {
-        public Vector2Int Position { get; }
-        public NodeConnections Connections { get; }
+        [SerializeField]
+        private Vector2Int _position;
+        [SerializeField]
+        private NodeConnections _connections;
+
+        public Vector2Int Position => _position;
+
+        public NodeConnections Connections => _connections;
 
         public Room(Vector2Int position, NodeConnections connections)
         {
-            Position = position;
-            Connections = connections;
+            _position = position;
+            _connections = connections;
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Position)}: {Position}, {nameof(Connections)}: {Connections}";
         }
     }
 }

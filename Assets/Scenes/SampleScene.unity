@@ -372,6 +372,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roomPrefab: {fileID: 7951967322560777317, guid: c587268556f76314b9da8e82351f63bd, type: 3}
+  roomPreview: {fileID: 7951967322560777317, guid: a0c468c0a399cf04796bab9da3ab2068, type: 3}
+  set: {fileID: 11400000, guid: c5f52b1fd0ac4344b893ff16ff849212, type: 2}
 --- !u!4 &1964298508
 Transform:
   m_ObjectHideFlags: 0

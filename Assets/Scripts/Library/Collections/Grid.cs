@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -163,6 +164,23 @@ namespace Library.Collections
             }
 
             return new ReadOnlySpan<T>(array);
+        }
+
+        public ReadOnlyCollection<(Vector2Int nodePosition, NodeConnections freeConnections)> GetEdgeNodes(NodeConnections limitation = NodeConnectionsExtension.AllDirections)
+        {
+            List<(Vector2Int nodePosition, NodeConnections freeConnections)> edges = new ();
+
+            foreach (var node in _connections)
+            {
+                NodeConnections freeConnections = ~node.Value;
+                NodeConnections availableConnections = freeConnections & limitation;
+                if ((availableConnections) != 0) 
+                {
+                    edges.Add((node.Key, availableConnections));
+                }
+            }
+
+            return new ReadOnlyCollection<(Vector2Int nodePosition, NodeConnections freeConnections)>(edges);
         }
 
 
