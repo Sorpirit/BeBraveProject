@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Core.Data.Rooms;
 using Core.Data.Scriptable;
 using Library.Collections;
 using UnityEngine;
@@ -12,17 +13,11 @@ namespace Core.Data
         public int CardCount => _deck.Count;
         public event Action<int> OnCardCountChanged;
         
-        private readonly List<Card> _deck;
+        private readonly List<RoomCard> _deck;
         
         public Deck(CardSet set)
         {
-            _deck = new List<Card>(set.Cards.Count);
-            foreach (Card card in set.Cards)
-            {
-                
-                _deck.Add(new Card(new Room(Vector2Int.zero, card.Room.Connections)));
-                //Debug.Log(card);
-            }
+            _deck = new List<RoomCard>(set.Cards);
         }
 
         public void Shuffle()
@@ -30,7 +25,7 @@ namespace Core.Data
             _deck.Shuffle();
         }
         
-        public Card TakeTop()
+        public RoomCard TakeTop()
         {
             Assert.IsTrue(_deck.Count > 0, "Deck is empty!");
             var result = _deck[0];
@@ -39,7 +34,7 @@ namespace Core.Data
             return result;
         }
 
-        public bool TryTakeTop(out Card topPick)
+        public bool TryTakeTop(out RoomCard topPick)
         {
             topPick = default;
             if (CardCount <= 0)
@@ -49,7 +44,7 @@ namespace Core.Data
             return true;
         }
 
-        public void PushBottom(Card card)
+        public void PushBottom(RoomCard card)
         {
             _deck.Add(card);
             OnCardCountChanged.Invoke(CardCount);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Core.Data.Rooms;
 using Library.Collections;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -22,8 +23,9 @@ namespace Core.Data
             OnRoomPlaced.Invoke(position, room);
         }
         
-        public bool PlaceRoom(Vector2Int position, Room room)
+        public bool PlaceRoom(Vector2Int position, RoomCard roomCard, out Room room)
         {
+            room = new Room(position, roomCard.Connections);
             _grid.Add(position, room);
 
             var neighbours = _grid.GetNeighbourValues(position, room.Connections);
@@ -52,15 +54,29 @@ namespace Core.Data
             return false;
         }
 
-        public ReadOnlySpan<Vector2Int> GetAvailablePlaces(Room room)
+        public ReadOnlySpan<Vector2Int> GetAvailablePlaces(NodeConnections connections)
         {
             HashSet<Vector2Int> availablePositions = new HashSet<Vector2Int>();
-            foreach ((Vector2Int nodePosition, NodeConnections freeConnections) in _grid.GetEdgeNodes(room.Connections))
+            foreach ((Vector2Int nodePosition, NodeConnections freeConnections) in _grid.GetEdgeNodes(connections))
             {
                 foreach (var direction in freeConnections.GetDirections())
                 {
                     availablePositions.Add(nodePosition + direction);
                 }
+            }
+
+            return new ReadOnlySpan<Vector2Int>(availablePositions.ToArray());
+        }
+        
+        public ReadOnlySpan<Vector2Int> GetAvailablePlacesAt(Vector2Int position, NodeConnections connections)
+        {
+            List<Vector2Int> availablePositions = new List<Vector2Int>();
+
+            var freeConnections = _grid.GetFreeConnections(position);
+            var availableConnections = freeConnections & connections;
+            foreach (var direction in availableConnections.GetDirections())
+            {
+                availablePositions.Add(position + direction);
             }
 
             return new ReadOnlySpan<Vector2Int>(availablePositions.ToArray());

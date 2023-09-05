@@ -6,8 +6,8 @@ namespace Core.Data.Scriptable
     [CreateAssetMenu(fileName = "NewCardSet", menuName = "Core/CardSet")]
     public class CardSet : ScriptableObject
     {
-        [SerializeField] private List<Card> cards;
+        [SerializeField] private List<RoomCard> cards;
 
-        public List<Card> Cards => cards;
+        public List<RoomCard> Cards => cards;
     }
 }

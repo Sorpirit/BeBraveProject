@@ -1,4 +1,5 @@
 using System;
+using Core.Data.Rooms;
 using UnityEngine;
 
 namespace Core.Data

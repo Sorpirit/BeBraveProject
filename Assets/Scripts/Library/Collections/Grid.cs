@@ -183,6 +183,12 @@ namespace Library.Collections
             return new ReadOnlyCollection<(Vector2Int nodePosition, NodeConnections freeConnections)>(edges);
         }
 
+        public NodeConnections GetFreeConnections(Vector2Int position)
+        {
+            Assert.IsTrue(ContainsAt(position));
+            return ~_connections[position] & NodeConnectionsExtension.AllDirections;
+        }
+
 
         private void ConnectInternal(Vector2Int position, ReadOnlySpan<NodeConnections> neighbourConnections,
             out int connectedNodes)

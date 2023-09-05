@@ -2,7 +2,7 @@ using System;
 using Library.Collections;
 using UnityEngine;
 
-namespace Core.Data
+namespace Core.Data.Rooms
 {
     [Serializable]
     public struct Room

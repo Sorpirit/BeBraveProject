@@ -1,7 +1,11 @@
 using System;
 using Core.Data;
+using Core.Data.Rooms;
 using Core.Data.Scriptable;
+using Core.PlayerSystems;
+using Core.RoomsSystem;
 using Library.Collections;
+using Scripts.DependancyInjector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -15,20 +19,24 @@ namespace Game
         private GameObject roomPreview;
         [SerializeField] 
         private CardSet set;
-        
-        private Vector2Int _pointer = new(0, 1);
+        [SerializeField] 
+        private GameObject playerGO;
 
         private bool _isGameStarted;
         private Deck _deck;
         private Dungeon _map;
         private PlayerHand _hand;
+        private PlayerPawn _player;
 
+        [Inject]
+        private IRoomFactory _roomFactory;
+        
         private GameObject[] _previews;
 
         private void Start()
         {
-            StartGame();
             InitPreviews(32);
+            StartGame();
         }
 
         private void InitPreviews(int count)
@@ -62,10 +70,12 @@ namespace Game
             _deck = new Deck(set);
             _map = new Dungeon();
             _hand = new PlayerHand(3);
+            _player = new PlayerPawn(new PlayerHealth(100));
 
             _deck.OnCardCountChanged += cardCount => Debug.Log("Deck: " + cardCount);
             _map.OnRoomPlaced += MapOnOnRoomPlaced;
             _hand.OnHandUpdated += cards => Debug.Log("Player Hand: " + string.Join(", ", cards));
+            _player.OnPlayerMove += newPos => playerGO.transform.position = new Vector3(newPos.x, newPos.y);
             
             _map.InitRoom(Vector2Int.zero);
 
@@ -77,6 +87,7 @@ namespace Game
             }
 
             _isGameStarted = true;
+            UpdatePreviews();
         }
 
         private void MapOnOnRoomPlaced(Vector2Int arg1, Room arg2)
@@ -87,15 +98,25 @@ namespace Game
         private void PlaceRoom()
         {
             Assert.IsTrue(_isGameStarted);
-            var room = _hand.GetCard(0);
-            bool result = _map.PlaceRoom(_pointer, new Room(_pointer, room.Room.Connections));
+            
+            var roomCard = _hand.GetCard(0);
+            Vector2 placementPosition = _previews[0].transform.position;
+            var roomPosition = new Vector2Int((int)placementPosition.x, (int)placementPosition.y);
+            bool result = _map.PlaceRoom(roomPosition, roomCard, out var room);
             if (!result)
             {
-                Debug.Log("Unable to place room");
+                Debug.Log("Unable to place room: " + roomCard);
                 return;
             }
             
             _hand.PlayCard(0);
+
+            var roomContent = _roomFactory.CreateRoom(roomCard.RoomId, room);
+            
+            _player.Move(roomPosition);
+            
+            roomContent.Enter(_player);
+
             if (_hand.CanTakeCard)
             {
                 if (_deck.CardCount > 0)
@@ -107,21 +128,25 @@ namespace Game
                     Debug.Log("Game over!");
                 }
             }
-
-            if (_hand.Cards.Count > 0)
-            {
-                var card = _hand.GetCard(0);
-                var availablePlaces = _map.GetAvailablePlaces(card.Room);
-                ResetPreviews();
-                for (int i = 0; i < availablePlaces.Length; i++)
-                {
-                    var position = availablePlaces[i];
-                    _previews[i].transform.position = new Vector3(position.x, position.y);
-                    _previews[i].SetActive(true);
-                }
-            }
             
-            _pointer += Vector2Int.up;
+            UpdatePreviews();
+        }
+
+        private void UpdatePreviews()
+        {
+            ResetPreviews();
+            
+            if (_hand.Cards.Count <= 0) 
+                return;
+            
+            var card = _hand.GetCard(0);
+            var availablePlaces = _map.GetAvailablePlacesAt(_player.Position, card.Connections);
+            for (int i = 0; i < availablePlaces.Length; i++)
+            {
+                var position = availablePlaces[i];
+                _previews[i].transform.position = new Vector3(position.x, position.y);
+                _previews[i].SetActive(true);
+            }
         }
     }
 }
