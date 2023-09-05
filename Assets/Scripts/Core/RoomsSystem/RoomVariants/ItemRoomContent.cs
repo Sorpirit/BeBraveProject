@@ -19,6 +19,7 @@ namespace Core.Data.Rooms
         public void Enter(PlayerPawn player)
         {
             _item.Use(player);
+            OnItemUsed?.Invoke();
         }
     }
 }

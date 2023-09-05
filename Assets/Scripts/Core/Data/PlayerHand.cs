@@ -26,7 +26,7 @@ namespace Core.Data
         {
             Assert.IsTrue(_hand.Count < _handCapacity, "Cant take more cards");
             _hand.Add(card);
-            OnHandUpdated.Invoke(Cards);
+            OnHandUpdated?.Invoke(Cards);
         }
 
         public RoomCard GetCard(int index) => _hand[index];
@@ -34,7 +34,7 @@ namespace Core.Data
         public void PlayCard(int index)
         {
             _hand.RemoveAt(index);
-            OnHandUpdated.Invoke(Cards);
+            OnHandUpdated?.Invoke(Cards);
         }
     }
 }

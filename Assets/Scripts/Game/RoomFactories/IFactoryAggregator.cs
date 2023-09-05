@@ -5,6 +5,6 @@ namespace Game.RoomFactories
 {
     public interface IFactoryAggregator
     {
-        void AddFactory(RoomId id, IRoomFactory factory);
+        void AddFactory(RoomId id, IRoomContentFactory factory);
     }
 }

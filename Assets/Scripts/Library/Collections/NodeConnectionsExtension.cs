@@ -72,14 +72,24 @@ namespace Library.Collections
             _ => throw new ArgumentException("Unknown direction: " + connections)
         };
 
-        public static NodeConnections Invert(this NodeConnections connections) => connections switch
+        public static NodeConnections Invert(this NodeConnections connections)
         {
-            NodeConnections.Up => NodeConnections.Down,
-            NodeConnections.Right => NodeConnections.Left,
-            NodeConnections.Down => NodeConnections.Up,
-            NodeConnections.Left => NodeConnections.Right,
-            _ => throw new ArgumentException("Unable to invert combined direction: " + connections)
-        };
+            NodeConnections result = NodeConnections.None;
+            
+            if ((connections & NodeConnections.Up) != 0)
+                result |= NodeConnections.Down;
+            
+            if ((connections & NodeConnections.Down) != 0)
+                result |= NodeConnections.Up;
+            
+            if ((connections & NodeConnections.Right) != 0)
+                result |= NodeConnections.Left;
+            
+            if ((connections & NodeConnections.Left) != 0)
+                result |= NodeConnections.Right;
+
+            return result;
+        }
 
         public static bool TryGetNodeConnection(Vector2Int node1, Vector2Int node2, out NodeConnections connection)
         {

@@ -9,7 +9,7 @@ namespace Game
     {
         [SerializeField] 
         private RoomFactory factory;
-
+        
         protected override void InstallBindings(IObjectDependencyInjector injector)
         {
             injector.RegisterSingle<IRoomFactory, RoomFactory>(factory);

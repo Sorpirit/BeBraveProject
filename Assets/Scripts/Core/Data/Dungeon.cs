@@ -16,11 +16,12 @@ namespace Core.Data
         private readonly Grid<Room> _grid = new();
 
 
-        public void InitRoom(Vector2Int position)
+        public Room InitRoom(Vector2Int position)
         {
             Room room = new Room(position, NodeConnectionsExtension.AllDirections);
             _grid.Add(position, room);
-            OnRoomPlaced.Invoke(position, room);
+            OnRoomPlaced?.Invoke(position, room);
+            return room;
         }
         
         public bool PlaceRoom(Vector2Int position, RoomCard roomCard, out Room room)
@@ -73,7 +74,11 @@ namespace Core.Data
             List<Vector2Int> availablePositions = new List<Vector2Int>();
 
             var freeConnections = _grid.GetFreeConnections(position);
-            var availableConnections = freeConnections & connections;
+            var availableConnections = freeConnections & connections.Invert();
+            
+            if(availableConnections == NodeConnections.None)
+                return ReadOnlySpan<Vector2Int>.Empty;
+            
             foreach (var direction in availableConnections.GetDirections())
             {
                 availablePositions.Add(position + direction);

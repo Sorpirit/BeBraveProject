@@ -30,7 +30,7 @@ namespace Core.Data
             Assert.IsTrue(_deck.Count > 0, "Deck is empty!");
             var result = _deck[0];
             _deck.RemoveAt(0);
-            OnCardCountChanged.Invoke(CardCount);
+            OnCardCountChanged?.Invoke(CardCount);
             return result;
         }
 
@@ -47,7 +47,7 @@ namespace Core.Data
         public void PushBottom(RoomCard card)
         {
             _deck.Add(card);
-            OnCardCountChanged.Invoke(CardCount);
+            OnCardCountChanged?.Invoke(CardCount);
         }
     }
 }

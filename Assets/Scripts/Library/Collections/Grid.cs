@@ -172,7 +172,7 @@ namespace Library.Collections
 
             foreach (var node in _connections)
             {
-                NodeConnections freeConnections = ~node.Value;
+                NodeConnections freeConnections = node.Value.Invert();
                 NodeConnections availableConnections = freeConnections & limitation;
                 if ((availableConnections) != 0) 
                 {

@@ -24,7 +24,7 @@ namespace Core.PlayerSystems
         public void Move(Vector2Int roomPosition)
         {
             Position = roomPosition;
-            OnPlayerMove.Invoke(Position);
+            OnPlayerMove?.Invoke(Position);
         }
     }
 }

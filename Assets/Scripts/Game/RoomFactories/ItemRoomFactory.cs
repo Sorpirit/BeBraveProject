@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Game.RoomFactories
 {
-    public class ItemRoomFactory : MonoBehaviour, IRoomFactory
+    public class ItemRoomFactory : MonoBehaviour, IRoomContentFactory
     {
         [SerializeField] private GameObject coinPrefab;
         [SerializeField] private int goldAmount;
@@ -24,18 +24,18 @@ namespace Game.RoomFactories
             _roomFactory.AddFactory(RoomId.HealthPotion, this);
         }
         
-        public IRoomContent CreateRoom(RoomId id, Room room)
+        public IRoomContent CreateRoom(RoomId id, GameObject parentTile)
         {
             ItemRoomContent roomContent;
             GameObject itemGO;
             switch (id)
             {
                 case RoomId.Coin:
-                    itemGO = Instantiate(coinPrefab, new Vector3(room.Position.x, room.Position.y), Quaternion.identity, transform);
+                    itemGO = Instantiate(coinPrefab, parentTile.transform);
                     roomContent = new ItemRoomContent(new Coins(goldAmount));
                     break;
                 case RoomId.HealthPotion:
-                    itemGO = Instantiate(potionPrefab, new Vector3(room.Position.x, room.Position.y), Quaternion.identity, transform);
+                    itemGO = Instantiate(potionPrefab, parentTile.transform);
                     roomContent = new ItemRoomContent(new Coins(healAmount));
                     break;
                 
@@ -43,7 +43,7 @@ namespace Game.RoomFactories
                     throw new AggregateException("Factory unable to process room id: " + id);
             }
 
-            //roomContent.OnItemUsed += () => Destroy(itemGO);
+            roomContent.OnItemUsed += () => Destroy(itemGO);
             return roomContent;
         }
     }
