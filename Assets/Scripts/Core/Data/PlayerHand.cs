@@ -8,6 +8,8 @@ namespace Core.Data
     public class PlayerHand
     {
         public event Action<ReadOnlyCollection<RoomCard>> OnHandUpdated;
+        public event Action<RoomCard> OnCardTaken;
+        public event Action<RoomCard> OnCardPlayed;
         
         public ReadOnlyCollection<RoomCard> Cards => _hand.AsReadOnly();
         public bool CanTakeCard => _hand.Count < _handCapacity;
@@ -26,6 +28,7 @@ namespace Core.Data
         {
             Assert.IsTrue(_hand.Count < _handCapacity, "Cant take more cards");
             _hand.Add(card);
+            OnCardTaken?.Invoke(card);
             OnHandUpdated?.Invoke(Cards);
         }
 
@@ -34,6 +37,7 @@ namespace Core.Data
         public void PlayCard(int index)
         {
             _hand.RemoveAt(index);
+            OnCardPlayed?.Invoke(_hand[index]);
             OnHandUpdated?.Invoke(Cards);
         }
     }

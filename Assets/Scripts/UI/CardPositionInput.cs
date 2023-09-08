@@ -1,7 +1,6 @@
-using System;
+using Core.GameStates;
 using Game;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UI
 {
@@ -9,7 +8,20 @@ namespace UI
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private GameObject coursewareVisualiser;
-        
+
+        private bool _isPlacingRoom;
+
+        private void Awake()
+        {
+            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+        }
+
+        private void GameContextCreated(GameContext context)
+        {
+            context.PlayCardState.OnStateEnter += () => _isPlacingRoom = true;
+            context.PlayCardState.OnStateExit += () => _isPlacingRoom = false;
+        }
+
         private void Update()
         {
             var mouseWorldPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
@@ -18,11 +30,10 @@ namespace UI
                 Mathf.FloorToInt(mouseWorldPosition.y));
 
             coursewareVisualiser.transform.position = new Vector3(tilePosition.x, tilePosition.y);
-            
+
             if (Input.GetMouseButtonDown(0))
             {
-                
-                GameMaster.Instance.PlaceRoom(tilePosition, 0);
+                GameRunner.Instance.Context.PlayCardState.PlaceRoom(tilePosition, 0);
             }
         }
     }

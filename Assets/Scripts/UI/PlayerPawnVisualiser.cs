@@ -1,7 +1,8 @@
-using System;
+using Core.GameStates;
 using DG.Tweening;
 using Game;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace UI
 {
@@ -9,28 +10,27 @@ namespace UI
     {
         [SerializeField] private float animationDuration;
 
-        public event Action OnFinishedMoving;
-        
-        private void Start()
+        private void Awake()
         {
-            GameMaster.Instance.OnGameStarted += GameStarted;
+            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
         }
 
-        private void GameStarted()
+        private void GameContextCreated(GameContext context)
         {
-            GameMaster.Instance.Player.OnPlayerMove += MovePlayer;
-            GameMaster.Instance.OnPlacementSuccessful += () => GameMaster.Instance.MoveToNextRoom();
+            context.PlayerMoveState.OnStateEnter += MovePlayer;
         }
 
-        private void MovePlayer(Vector2Int moveTo)
+        private void MovePlayer()
         {
+            Assert.IsTrue(GameRunner.Instance.Context.CurrentRoom.HasValue);
+            var moveTo = GameRunner.Instance.Context.CurrentRoom.Value.Position;
             transform
                 .DOMove(new Vector3(moveTo.x, moveTo.y), animationDuration).OnComplete(FinishMoving);
         }
 
         private void FinishMoving()
         {
-            OnFinishedMoving?.Invoke();
+            GameRunner.Instance.Context.PlayerMoveState.Trigger();
         }
     }
 }
