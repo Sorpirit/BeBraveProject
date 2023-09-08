@@ -5,7 +5,7 @@ namespace Core.GameStates.States
 {
     public class TakeCardState : TriggerGameState
     {
-        protected override IState _nextState => _context.PlayCardState;
+        protected override IState _nextState => _context.CheckCardValidity;
         
         public TakeCardState(GameContext context) : base(context)
         {

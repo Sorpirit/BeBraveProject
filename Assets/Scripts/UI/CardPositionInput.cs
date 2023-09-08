@@ -24,6 +24,9 @@ namespace UI
 
         private void Update()
         {
+            if(!_isPlacingRoom)
+                return;
+            
             var mouseWorldPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPosition += Vector3.one * 0.5f;
             var tilePosition = new Vector2Int(Mathf.FloorToInt(mouseWorldPosition.x),

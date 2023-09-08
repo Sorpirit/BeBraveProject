@@ -252,6 +252,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   previewRoom: {fileID: 7951967322560777317, guid: a0c468c0a399cf04796bab9da3ab2068, type: 3}
+--- !u!1 &363688739
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 363688740}
+  - component: {fileID: 363688741}
+  m_Layer: 0
+  m_Name: DropingUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &363688740
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363688739}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1394384826}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &363688741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363688739}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9307c435d4d74a2580ca1692f197e596, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,6 +672,7 @@ Transform:
   m_Children:
   - {fileID: 195008761}
   - {fileID: 2006655363}
+  - {fileID: 363688740}
   m_Father: {fileID: 914800475}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -643,7 +688,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e7533c85d7b429e8c0c2867961e2d57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pawnVisualiser: {fileID: 1458068165}
   _placementPreview: {fileID: 195008762}
 --- !u!1 &1458068162
 GameObject:
@@ -836,7 +880,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   set: {fileID: 11400000, guid: c5f52b1fd0ac4344b893ff16ff849212, type: 2}
-  playerHandCapacity: 3
 --- !u!1 &2006655362
 GameObject:
   m_ObjectHideFlags: 0

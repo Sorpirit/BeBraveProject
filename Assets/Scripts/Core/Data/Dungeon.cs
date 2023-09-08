@@ -24,35 +24,32 @@ namespace Core.Data
             return room;
         }
         
-        public bool PlaceRoom(Vector2Int position, RoomCard roomCard, out Room room)
+        public bool PlaceRoom(Vector2Int position, RoomCard roomCard, Room connectedRoom, out Room room)
         {
             room = new Room(position, roomCard.Connections);
-            _grid.Add(position, room);
-
-            var neighbours = _grid.GetNeighbourValues(position, room.Connections);
-            bool hasConnection = false;
-            foreach (var neighbour in neighbours)
+            if (_grid.ContainsAt(position))
+                return false;
+            
+            bool inPossiblePositions = false;
+            var possiblePositions = GetAvailablePlacesAt(connectedRoom.Position, roomCard.Connections);
+            foreach(var possiblePosition in possiblePositions)
             {
-                var result = NodeConnectionsExtension.TryGetNodeConnection(neighbour.Position, position,
-                    out NodeConnections connection);
-                Assert.IsTrue(result, $"Nodes are not adjustment: {position}, {neighbour.Position}");
-
-                bool connected = (connection & room.Connections) != 0 && (connection.Invert() & neighbour.Connections) != 0;
-                if (connected)
+                if(possiblePosition.Equals(position))
                 {
-                    _grid.Connect(position, connection);
-                    hasConnection = true;
+                    inPossiblePositions = true;
+                    break;
                 }
             }
+            
+            if(!inPossiblePositions)
+                return false;
+            
+            _grid.Add(position, room);
+            var connection = (connectedRoom.Position - position).ToSingleNodeConnection();
+            _grid.Connect(position, connection);
 
-            if (hasConnection)
-            {
-                OnRoomPlaced?.Invoke(position, room);
-                return true;
-            }
-
-            _grid.Remove(position);
-            return false;
+            OnRoomPlaced?.Invoke(position, room);
+            return true;
         }
 
         public ReadOnlySpan<Vector2Int> GetAvailablePlaces(NodeConnections connections)
@@ -73,7 +70,7 @@ namespace Core.Data
         {
             List<Vector2Int> availablePositions = new List<Vector2Int>();
 
-            var freeConnections = _grid.GetFreeConnections(position);
+            var freeConnections = _grid.GetFreeConnections(position) & _grid[position].Connections;
             var availableConnections = freeConnections & connections.Invert();
             
             if(availableConnections == NodeConnections.None)

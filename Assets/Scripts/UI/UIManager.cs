@@ -25,7 +25,7 @@ namespace UI
         private void GameStart()
         {
             GameContext context = GameRunner.Instance.Context;
-            context.Hand.OnCardTaken += (card) => context.TakeCardState.Trigger();
+            context.Hand.OnCardAdded += (card) => context.TakeCardState.Trigger();
         }
 
         private void Update()

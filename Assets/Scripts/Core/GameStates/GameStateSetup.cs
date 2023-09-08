@@ -12,8 +12,10 @@ namespace Core.GameStates
 
             GameStartState gameStartState = new GameStartState(resultContext, cardSet, roomContent);
             FinishState gameFinishState = new FinishState(resultContext);
+            CheckCardsValid checkCardsValid = new CheckCardsValid(resultContext);
 
             TakeCardState takeCardState = new TakeCardState(resultContext);
+            DropCardState dropCardState = new DropCardState(resultContext);
             PlayCardState playCardState = new PlayCardState(resultContext);
             RoomContentPlacerState placeRoomState = new RoomContentPlacerState(resultContext);
             PlayerMoveState playerMoveState = new PlayerMoveState(resultContext);
@@ -21,8 +23,10 @@ namespace Core.GameStates
 
             resultContext.SetStates(
                 gameStartState, 
-                gameFinishState, 
+                gameFinishState,
+                checkCardsValid,
                 playCardState, 
+                dropCardState,
                 placeRoomState, 
                 playerMoveState,
                 playerEnterRoomState, 

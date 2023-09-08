@@ -17,8 +17,9 @@ namespace Core.GameStates.States
         public void PlaceRoom(Vector2Int tilePosition, int handCardIndex)
         {
             Assert.IsTrue(_isStateActive);
+            Assert.IsTrue(_context.CurrentRoom.HasValue);
             var roomCard = _context.Hand.GetCard(handCardIndex);
-            bool result = _context.Map.PlaceRoom(tilePosition, roomCard, out var room);
+            bool result = _context.Map.PlaceRoom(tilePosition, roomCard, _context.CurrentRoom.Value, out var room);
             if (!result)
             {
                 Debug.Log("Unable to place room: " + roomCard);

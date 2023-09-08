@@ -29,7 +29,9 @@ namespace Core.GameStates.States
             _context.InitContext(deck, map, hand, player, _roomFactory);
             
             var startRoom = _context.Map.InitRoom(Vector2Int.zero);
-            _context.RoomFactory.CreateRoom(RoomId.Empty, startRoom);
+            var startContentRoom = _context.RoomFactory.CreateRoom(RoomId.Empty, startRoom);
+            _context.CurrentRoom = startRoom;
+            _context.CurrentRoomContent = startContentRoom;
             
             Assert.IsTrue(_context.Deck.CardCount >= _context.Hand.HandCapacity);
             while (_context.Hand.CanTakeCard)
