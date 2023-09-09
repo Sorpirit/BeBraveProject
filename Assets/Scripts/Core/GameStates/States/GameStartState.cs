@@ -24,7 +24,7 @@ namespace Core.GameStates.States
             var deck = new Deck(_set);
             var map = new Dungeon();
             var hand = new PlayerHand(3);
-            var player = new PlayerPawn(new PlayerHealth(100));
+            var player = new PlayerPawn(new PlayerHealth(32));
 
             _context.InitContext(deck, map, hand, player, _roomFactory);
             

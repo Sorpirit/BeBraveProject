@@ -16,12 +16,22 @@ MonoBehaviour:
   - roomId: 0
     connections: 7
   - roomId: 1
-    connections: 9
-  - roomId: 2
-    connections: 1
-  - roomId: 1
-    connections: 1
-  - roomId: 1
-    connections: 1
+    connections: 11
   - roomId: 2
     connections: 7
+  - roomId: 3
+    connections: 11
+  - roomId: 4
+    connections: 13
+  - roomId: 5
+    connections: 11
+  - roomId: 2
+    connections: 14
+  - roomId: 2
+    connections: 13
+  - roomId: 2
+    connections: 14
+  - roomId: 2
+    connections: 11
+  - roomId: 2
+    connections: 13

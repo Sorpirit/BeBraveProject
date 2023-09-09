@@ -7,6 +7,9 @@ namespace Core.Data.Rooms
     {
         Empty,
         Coin,
-        HealthPotion
+        HealthPotion,
+        SimpleSword,
+        SimpleShield,
+        BasicTrap,
     }
 }
