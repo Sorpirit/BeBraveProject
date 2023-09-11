@@ -10,10 +10,14 @@ namespace Game
         [SerializeField] 
         private RoomFactory factory;
         
+        [SerializeField]
+        private GridPositionConvertor positionConvertor;
+        
         protected override void InstallBindings(IObjectDependencyInjector injector)
         {
             injector.RegisterSingle<IRoomFactory, RoomFactory>(factory);
             injector.RegisterSingle<IFactoryAggregator, RoomFactory>(factory);
+            injector.RegisterSingle<IRoomPositionConvertor, GridPositionConvertor>(positionConvertor);
         }
     }
 }

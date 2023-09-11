@@ -1,6 +1,7 @@
 using Core.GameStates;
 using DG.Tweening;
 using Game;
+using Scripts.DependancyInjector;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -10,6 +11,9 @@ namespace UI
     {
         [SerializeField] private float animationDuration;
 
+        [Inject]
+        private IRoomPositionConvertor _positionConvertor;
+        
         private void Awake()
         {
             GameRunner.Instance.OnGameContextCreated += GameContextCreated;
@@ -23,9 +27,10 @@ namespace UI
         private void MovePlayer()
         {
             Assert.IsTrue(GameRunner.Instance.Context.CurrentRoom.HasValue);
-            var moveTo = GameRunner.Instance.Context.CurrentRoom.Value.Position;
+            Assert.IsTrue(_positionConvertor != null);
+            var moveTo = _positionConvertor.TileToWorld(GameRunner.Instance.Context.CurrentRoom.Value.Position);
             transform
-                .DOMove(new Vector3(moveTo.x, moveTo.y), animationDuration).OnComplete(FinishMoving);
+                .DOMove(moveTo, animationDuration).OnComplete(FinishMoving);
         }
 
         private void FinishMoving()

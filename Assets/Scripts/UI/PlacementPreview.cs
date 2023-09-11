@@ -1,4 +1,5 @@
 using Game;
+using Scripts.DependancyInjector;
 using UnityEngine;
 
 namespace UI
@@ -7,6 +8,9 @@ namespace UI
     {
         [SerializeField] private GameObject previewRoom;
 
+        [Inject]
+        private IRoomPositionConvertor _positionConvertor;
+        
         private GameObject[] _previews;
 
         private void Awake()
@@ -28,7 +32,7 @@ namespace UI
             for (int i = 0; i < availablePlaces.Length; i++)
             {
                 var position = availablePlaces[i];
-                _previews[i].transform.position = new Vector3(position.x, position.y);
+                _previews[i].transform.position = _positionConvertor.TileToWorld(position);
                 _previews[i].SetActive(true);
             }
         }

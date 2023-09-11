@@ -1,5 +1,6 @@
 using Core.GameStates;
 using Game;
+using Scripts.DependancyInjector;
 using UnityEngine;
 
 namespace UI
@@ -9,6 +10,9 @@ namespace UI
         [SerializeField] private Camera _camera;
         [SerializeField] private GameObject coursewareVisualiser;
 
+        [Inject]
+        private IRoomPositionConvertor _positionConvertor;
+        
         private bool _isPlacingRoom;
         private Vector3 _cursorSpeed;
         private readonly float _cursorSpeedAmplitude = 18;
@@ -27,10 +31,8 @@ namespace UI
         private void Update()
         {
             var mouseWorldPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-            mouseWorldPosition += Vector3.one * 0.5f;
-            var tilePosition = new Vector2Int(Mathf.FloorToInt(mouseWorldPosition.x),
-                Mathf.FloorToInt(mouseWorldPosition.y));
-
+            Vector2Int tilePosition = _positionConvertor.WorldToTile(mouseWorldPosition);
+            
             coursewareVisualiser.transform.position = Vector3.SmoothDamp(coursewareVisualiser.transform.position, new Vector3(tilePosition.x, tilePosition.y), ref _cursorSpeed, _cursorSpeedAmplitude * Time.deltaTime); 
 
             if(!_isPlacingRoom)
