@@ -18,14 +18,14 @@ namespace UI
             InitPreviews(4);
         }
 
-        public void UpdatePreviews()
+        public void UpdatePreviews(int? cardIndex)
         {
             ResetPreviews();
 
-            if (GameRunner.Instance.Context.Hand.Cards.Count <= 0)
+            if (GameRunner.Instance.Context.Hand.Cards.Count <= 0 || !cardIndex.HasValue)
                 return;
 
-            var card = GameRunner.Instance.Context.Hand.GetCard(0);
+            var card = GameRunner.Instance.Context.Hand.GetCard(cardIndex.Value);
             var availablePlaces =
                 GameRunner.Instance.Context.Map.GetAvailablePlacesAt(GameRunner.Instance.Context.Player.Position,
                     card.Connections);

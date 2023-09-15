@@ -30,7 +30,7 @@ namespace Core.GameStates.States
             _context.CurrentRoom = room;
             _context.UsedRoomCard = roomCard;
             OnRoomPlaced?.Invoke(room);
-            _context.Hand.PlayCard(0);
+            _context.Hand.PlayCard(handCardIndex);
             _context.ChangeState(_context.PlaceRoomState);
         }
     }

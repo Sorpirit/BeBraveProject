@@ -1,5 +1,6 @@
 using Core.GameStates;
 using Game;
+using UI.CardsUI;
 using UnityEngine;
 
 namespace UI
@@ -7,15 +8,18 @@ namespace UI
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private PlacementPreview _placementPreview;
+        [SerializeField] private PlayerHandUIManager _playerHandUIManager;
 
         private void Awake()
         {
             GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+
+            _playerHandUIManager.OnSelectionChanged += _placementPreview.UpdatePreviews;
         }
 
         private void GameContextCreated(GameContext context)
         {
-            context.PlayCardState.OnStateEnter += () => _placementPreview.UpdatePreviews();
+            context.PlayCardState.OnStateEnter += () => _placementPreview.UpdatePreviews(_playerHandUIManager.SelectedCardIndex);
             
             context.PlaceRoomState.OnStateEnter += () => context.PlaceRoomState.Trigger();
             context.PlayerEnterRoomState.OnStateEnter += () => context.PlayerEnterRoomState.Trigger();

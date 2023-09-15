@@ -1,7 +1,7 @@
 using Core.Data.Items;
 using Core.PlayerSystems;
 using Core.RoomsSystem;
-using Unity.Plastic.Newtonsoft.Json.Serialization;
+using System;
 
 namespace Core.Data.Rooms
 {

@@ -1,6 +1,7 @@
 using Core.GameStates;
 using Game;
 using Scripts.DependancyInjector;
+using UI.CardsUI;
 using UnityEngine;
 
 namespace UI
@@ -9,7 +10,8 @@ namespace UI
     {
         [SerializeField] private Camera _camera;
         [SerializeField] private GameObject coursewareVisualiser;
-
+        [SerializeField] private PlayerHandUIManager _playerHandUIManager;
+        
         [Inject]
         private IRoomPositionConvertor _positionConvertor;
         
@@ -37,10 +39,11 @@ namespace UI
 
             if(!_isPlacingRoom)
                 return;
-            
-            if (Input.GetMouseButtonDown(0))
+
+            int? selected = _playerHandUIManager.SelectedCardIndex;
+            if (Input.GetMouseButtonDown(0) && selected.HasValue)
             {
-                GameRunner.Instance.Context.PlayCardState.PlaceRoom(tilePosition, 0);
+                GameRunner.Instance.Context.PlayCardState.PlaceRoom(tilePosition, selected.Value);
             }
         }
     }
