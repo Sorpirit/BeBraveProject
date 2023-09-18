@@ -25,7 +25,6 @@ namespace UI
             context.PlayCardState.OnStateEnter += () => _placementPreview.UpdatePreviews(_playerHandUIManager.SelectedCardIndex);
             
             context.PlaceRoomState.OnStateEnter += () => context.PlaceRoomState.Trigger();
-            context.PlayerEnterRoomState.OnStateEnter += () => context.PlayerEnterRoomState.Trigger();
             context.GameStartState.OnStateEnter += GameStart;
 
             gameOverPanel.SetActive(false);

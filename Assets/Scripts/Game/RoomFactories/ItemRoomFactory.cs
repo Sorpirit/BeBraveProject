@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Game.RoomFactories
 {
-    public class ItemRoomFactory : MonoBehaviour, IRoomContentFactory
+    public class ItemRoomFactory : MonoBehaviour, IRoomContentFactory, IPickUpCallbacks, IRoomContentCallBack<ItemRoomContext>
     {
         [SerializeField] private int goldAmount;
         [SerializeField] private int healAmount;
@@ -20,6 +20,9 @@ namespace Game.RoomFactories
         
         [Inject] 
         private IFactoryAggregator _roomFactory;
+        
+        public event Action OnItemPickedUp;
+        public event Action<ItemRoomContext> OnRoomContentCreated;
         
         private void Start()
         {
@@ -67,8 +70,19 @@ namespace Game.RoomFactories
                     throw new AggregateException("Factory unable to process room id: " + id);
             }
 
-            roomContent.OnItemUsed += () => Destroy(itemGO);
+            roomContent.OnItemUsed += () => OnItemPickedUp?.Invoke();
+            OnRoomContentCreated?.Invoke(new ItemRoomContext(itemGO));
             return roomContent;
+        }
+    }
+
+    public class ItemRoomContext
+    {
+        public GameObject ItemGameObject { get; }
+
+        public ItemRoomContext(GameObject itemGameObject)
+        {
+            ItemGameObject = itemGameObject;
         }
     }
 }

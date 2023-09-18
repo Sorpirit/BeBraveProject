@@ -10,7 +10,9 @@ namespace UI
     {
         [SerializeField] private BasicIconFactory basicIconFactory;
         [SerializeField] private GridPositionConvertor positionConvertor;
+        [SerializeField] private RoomFactory factory;
         [SerializeField] private FightingEncounterFactory fightingEncounterFactory;
+        [SerializeField] private ItemRoomFactory itemRoomFactory;
         [SerializeField] private CameraEffects cameraEffects;
         
         protected override void InstallBindings(IObjectDependencyInjector injector)
@@ -20,6 +22,11 @@ namespace UI
             
             injector.RegisterSingle<IFightCallbacks, FightingEncounterFactory>(fightingEncounterFactory);
             injector.RegisterSingle<IRoomContentCallBack<FightEncounterContext>, FightingEncounterFactory>(fightingEncounterFactory);
+            
+            injector.RegisterSingle<IPickUpCallbacks, ItemRoomFactory>(itemRoomFactory);
+            injector.RegisterSingle<IRoomContentCallBack<ItemRoomContext>, ItemRoomFactory>(itemRoomFactory);
+            
+            injector.RegisterSingle<IRoomContentCallBack<EmptyRoomContext>, RoomFactory>(factory);
             
             injector.RegisterSingle<ICameraEffects, CameraEffects>(cameraEffects);
         }

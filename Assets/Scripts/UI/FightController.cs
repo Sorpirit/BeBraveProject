@@ -78,7 +78,8 @@ namespace UI
             var sequence = DOTween.Sequence();
             sequence
                 .Append(player.transform.DOMove(playerOriginalPosition, moveDuration))
-                .Join(cameraEffects.ZoomOut());
+                .Join(cameraEffects.ZoomOut())
+                .OnComplete(() => GameRunner.Instance.Context.PlayerEnterRoomState.Trigger());
         }
 
         private void OnFightRoundFinished()

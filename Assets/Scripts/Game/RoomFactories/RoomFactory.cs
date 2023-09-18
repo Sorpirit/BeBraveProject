@@ -11,12 +11,14 @@ using UnityEngine.Assertions;
 
 namespace Game.RoomFactories
 {
-    public class RoomFactory: MonoBehaviour, IRoomFactory, IFactoryAggregator
+    public class RoomFactory: MonoBehaviour, IRoomFactory, IFactoryAggregator, IRoomContentCallBack<EmptyRoomContext>
     {
         [SerializeField] private RoomOrientationSetupSO roomOrientationSetup;
         
         [Inject]
         private IRoomPositionConvertor _positionConvertor;
+        
+        public event Action<EmptyRoomContext> OnRoomContentCreated;
         
         private readonly Dictionary<RoomId, IRoomContentFactory> _factories = new();
         private Dictionary<NodeConnections, GameObject> _roomPrefabs;
@@ -32,7 +34,11 @@ namespace Game.RoomFactories
             var tile = Instantiate(_roomPrefabs[room.Connections], position, Quaternion.identity);
 
             if (id == RoomId.Empty)
+            {
+                OnRoomContentCreated?.Invoke(new EmptyRoomContext());
                 return new EmptyRoomContent();
+            }
+                
 
             if (_factories.TryGetValue(id, out var factory))
                 return factory.CreateRoom(id, tile);
@@ -47,4 +53,6 @@ namespace Game.RoomFactories
             _factories.Add(id, factory);
         }
     }
+
+    public class EmptyRoomContext { }
 }
