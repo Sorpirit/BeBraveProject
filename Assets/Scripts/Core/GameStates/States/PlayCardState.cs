@@ -14,7 +14,7 @@ namespace Core.GameStates.States
         {
         }
         
-        public void PlaceRoom(Vector2Int tilePosition, int handCardIndex)
+        public bool PlaceRoom(Vector2Int tilePosition, int handCardIndex)
         {
             Assert.IsTrue(_isStateActive);
             Assert.IsTrue(_context.CurrentRoom.HasValue);
@@ -24,7 +24,7 @@ namespace Core.GameStates.States
             {
                 Debug.Log("Unable to place room: " + roomCard);
                 OnPlacementFailed?.Invoke(tilePosition, handCardIndex);
-                return;
+                return false;
             }
 
             _context.CurrentRoom = room;
@@ -32,6 +32,7 @@ namespace Core.GameStates.States
             OnRoomPlaced?.Invoke(room);
             _context.Hand.PlayCard(handCardIndex);
             _context.ChangeState(_context.PlaceRoomState);
+            return true;
         }
     }
 }

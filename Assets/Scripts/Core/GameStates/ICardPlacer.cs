@@ -8,6 +8,6 @@ namespace Core.GameStates
     {
         event Action<Room> OnRoomPlaced;
         event Action<Vector2Int, int> OnPlacementFailed;
-        void PlaceRoom(Vector2Int tilePosition, int handCardIndex);
+        bool PlaceRoom(Vector2Int tilePosition, int handCardIndex);
     }
 }

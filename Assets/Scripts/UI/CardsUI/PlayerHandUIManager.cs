@@ -24,6 +24,7 @@ namespace UI.CardsUI
         public int? SelectedCardIndex => _selectedCard?.Index;
         
         public event Action<int?> OnSelectionChanged;
+        public Func<int, Vector3, bool> TryPlace; 
         
         private List<CardUI> _cards = new();
         
@@ -90,14 +91,18 @@ namespace UI.CardsUI
             }
         }
         
-        public void DragCard(CardUI card, PointerEventData eventData)
+        public void DragCard(CardUI cardUI, PointerEventData eventData)
         {
-            card.transform.position = eventData.position;
+            cardUI.transform.position = eventData.position;
+            
+            if (_selectedCard != cardUI)
+                UpdateSelectedCard(cardUI);
         }
 
-        public void DropCard(CardUI card, PointerEventData eventData)
+        public void DropCard(CardUI cardUI, PointerEventData eventData)
         {
-            card.ResetPosition(eventData);
+            if(!TryPlace?.Invoke(cardUI.Index, cardUI.transform.position) ?? false)
+                cardUI.ResetPosition(eventData);
         }
 
         public void ClickedCard(CardUI cardUI, PointerEventData pointerEvent)

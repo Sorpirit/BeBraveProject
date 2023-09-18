@@ -9,7 +9,6 @@ namespace UI
     public class CardPositionInput : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
-        [SerializeField] private GameObject coursewareVisualiser;
         [SerializeField] private PlayerHandUIManager _playerHandUIManager;
         
         [Inject]
@@ -28,23 +27,32 @@ namespace UI
         {
             context.PlayCardState.OnStateEnter += () => _isPlacingRoom = true;
             context.PlayCardState.OnStateExit += () => _isPlacingRoom = false;
+            
+            _playerHandUIManager.TryPlace = TryPlace;
         }
 
         private void Update()
         {
-            var mouseWorldPosition = _camera.ScreenToWorldPoint(Input.mousePosition);
-            Vector2Int tilePosition = _positionConvertor.WorldToTile(mouseWorldPosition);
-            
-            coursewareVisualiser.transform.position = Vector3.SmoothDamp(coursewareVisualiser.transform.position, new Vector3(tilePosition.x, tilePosition.y), ref _cursorSpeed, _cursorSpeedAmplitude * Time.deltaTime); 
+            if(_isPlacingRoom && Input.GetMouseButtonDown(0) && _playerHandUIManager.SelectedCardIndex.HasValue)
+                TryPlace(_playerHandUIManager.SelectedCardIndex.Value);
+        }
 
+        private bool TryPlace(int selectedCardIndex)
+        {
             if(!_isPlacingRoom)
-                return;
-
-            int? selected = _playerHandUIManager.SelectedCardIndex;
-            if (Input.GetMouseButtonDown(0) && selected.HasValue)
-            {
-                GameRunner.Instance.Context.PlayCardState.PlaceRoom(tilePosition, selected.Value);
-            }
+                return false;
+           
+            return TryPlace(selectedCardIndex, Input.mousePosition);
+        }
+        
+        private bool TryPlace(int selectedCardIndex, Vector3 pointerScreenPosition)
+        {
+            if(!_isPlacingRoom)
+                return false;
+            
+            Vector3 pointerWorldPosition = _camera.ScreenToWorldPoint(pointerScreenPosition);
+            Vector2Int tilePosition = _positionConvertor.WorldToTile(pointerWorldPosition);
+            return GameRunner.Instance.Context.PlayCardState.PlaceRoom(tilePosition, selectedCardIndex);
         }
     }
 }
