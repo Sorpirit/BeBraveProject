@@ -23,6 +23,8 @@ MonoBehaviour:
     connections: 11
   - roomId: 4
     connections: 13
+  - roomId: 6
+    connections: 13
   - roomId: 5
     connections: 11
   - roomId: 2
@@ -33,5 +35,7 @@ MonoBehaviour:
     connections: 14
   - roomId: 2
     connections: 11
+  - roomId: 2
+    connections: 13
   - roomId: 2
     connections: 13

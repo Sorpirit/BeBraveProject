@@ -29,9 +29,9 @@ namespace Core.PlayerSystems
                 }
             }
         }
-        
-        public IWeapon Weapon { get; private set; }
-        public IShield Shield { get; private set; }
+
+        public IWeapon Weapon { get; private set; } = new BasicSword(1);
+        public IShield Shield { get; private set; } = new BasicShield(0);
 
         public Action<int> OnGoldChanged;
         public Action<IWeapon> OnWeaponChanged;

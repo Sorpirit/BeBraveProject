@@ -1,13 +1,17 @@
 using System;
 using Core.PlayerSystems;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Core.RoomsSystem.RoomVariants
 {
-    public class FightEncounter : IRoomContent
+    public class FightEncounter : IRoomContent, IFightCallbacks
     {
         private readonly IEnemy _enemy;
+        private PlayerPawn _player;
         private bool _isEnemyDead = false;
-
+        private bool _roundRunning = false;
+        
         public event Action OnFightRoundFinished;
         public event Action OnEncounterFinished;
         
@@ -19,18 +23,49 @@ namespace Core.RoomsSystem.RoomVariants
         
         public void Enter(PlayerPawn player)
         {
-            var d = new DamageInfo(player.Inventory.Weapon.Damage);
+            _player = player;
+            Round();
+        }
+
+        public void TriggerRound()
+        {
+            Assert.IsFalse(_roundRunning);
+            Round();
+        }
+
+        private void Round()
+        {
+            _roundRunning = true;
+            var d = new DamageInfo(_player.Inventory.Weapon.Damage);
             _enemy.Health.TakeDamage(d);
-            player.Inventory.Weapon.Use(player);
+            _player.Inventory.Weapon.Use(_player);
 
             if (_isEnemyDead)
-                FinishFightRound();
+            {
+                FinishEncounter();
+                return;
+            }
 
+            d = new DamageInfo(Mathf.Max(_enemy.Weapon.Damage - _player.Inventory.Shield.Shield, 0));
+            if(d.DamageAmount > 0)
+                _player.HealthSystem.TakeDamage(d);
+            
+            if (_player.HealthSystem.IsDead)
+                FinishEncounter();
+            else
+                FinishFightRound();
+        }
+
+        private void FinishEncounter()
+        {
+            _roundRunning = false;
+            OnEncounterFinished?.Invoke();
         }
 
         private void FinishFightRound()
         {
-            OnEncounterFinished?.Invoke();
+            _roundRunning = false;
+            OnFightRoundFinished?.Invoke();
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Game.RoomFactories
         {
             ItemRoomContent roomContent;
             GameObject itemGO;
-            int index = (int)id - 1;
+            int index = (int) id - (int) RoomId.Coin;
             itemGO = Instantiate(itemsPrefabs[index], parentTile.transform);
             switch (id)
             {

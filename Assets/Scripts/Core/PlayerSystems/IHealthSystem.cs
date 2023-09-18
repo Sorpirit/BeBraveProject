@@ -9,6 +9,7 @@ namespace Core.PlayerSystems
         
         int Health { get; }
         int MaxHealth { get; }
+        bool IsDead { get; }
 
         void Heal(int amount);
     }

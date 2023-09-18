@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Core.PlayerSystems
 {
-    public class PlayerHealth : IHealthSystem
+    public class StandardHealthSystem : IHealthSystem
     {
         private int _maxHealth;
         public event Action<int> OnHealthChanged;
@@ -11,8 +11,9 @@ namespace Core.PlayerSystems
         
         public int Health { get; private set; }
         public int MaxHealth => _maxHealth;
+        public bool IsDead { get; private set; }
 
-        public PlayerHealth(int maxHealth)
+        public StandardHealthSystem(int maxHealth)
         {
             _maxHealth = maxHealth;
             Health = _maxHealth;
@@ -34,6 +35,7 @@ namespace Core.PlayerSystems
             if (Health <= 0)
             {
                 OnDied?.Invoke();
+                IsDead = true;
             }
             Debug.Log($"Take damage HP:{Health}(-{damageInfo.DamageAmount})");
         }
