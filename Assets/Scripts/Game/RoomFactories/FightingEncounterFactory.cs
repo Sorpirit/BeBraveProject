@@ -9,7 +9,7 @@ using UnityEngine.Assertions;
 
 namespace Game.RoomFactories
 {
-    public class FightingEncounterFactory : MonoBehaviour, IRoomContentFactory, IFightCallbacks
+    public class FightingEncounterFactory : MonoBehaviour, IRoomContentFactory, IFightCallbacks, IRoomContentCallBack<FightEncounterContext>
     {
         [SerializeField] private int basicEnemyMaxHp = 15;
         [SerializeField] private int basicEnemyDamage = 15;
@@ -21,6 +21,7 @@ namespace Game.RoomFactories
         
         public event Action OnFightRoundFinished;
         public event Action OnEncounterFinished;
+        public event Action<FightEncounterContext> OnRoomContentCreated;
         
         private IFightCallbacks _currentFight;
         
@@ -48,7 +49,7 @@ namespace Game.RoomFactories
                     throw new AggregateException("Factory unable to process room id: " + id);
             }
 
-            _currentFight.OnEncounterFinished += () => Destroy(enemyGO);
+            OnRoomContentCreated?.Invoke(new FightEncounterContext(enemyGO));
             return roomContent;
         }
         

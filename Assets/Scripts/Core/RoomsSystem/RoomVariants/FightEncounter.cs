@@ -24,7 +24,6 @@ namespace Core.RoomsSystem.RoomVariants
         public void Enter(PlayerPawn player)
         {
             _player = player;
-            Round();
         }
 
         public void TriggerRound()
