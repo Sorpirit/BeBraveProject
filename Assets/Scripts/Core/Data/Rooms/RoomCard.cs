@@ -13,7 +13,7 @@ namespace Core.Data
 
         public RoomId RoomId => roomId;
 
-        public NodeConnections Connections => connections;
+        public NodeConnections Connections => connections.ClampRange();
 
         public override string ToString()
         {

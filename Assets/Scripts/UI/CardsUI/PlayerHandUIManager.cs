@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Data;
 using Core.GameStates;
 using Game;
+using Game.Data;
 using JetBrains.Annotations;
 using Library.Collections;
 using Scripts.DependancyInjector;
@@ -15,8 +16,8 @@ namespace UI.CardsUI
     {
         [SerializeField] private Transform handTransform;
         [SerializeField] private CardUI cardPrefab;
-        [SerializeField] private GameObject connectionOrbPrefab;
         [SerializeField] private List<Sprite> cardSprites;
+        [SerializeField] private RoomOrientationSetupSO roomOrientationSetup;
         
         [Inject]
         private IRoomPositionConvertor _positionConvertor;
@@ -29,10 +30,12 @@ namespace UI.CardsUI
         private List<CardUI> _cards = new();
         
         private CardUI _selectedCard;
+        private Dictionary<NodeConnections, Sprite> _roomSprites;
         
         private void Awake()
         {
             GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            _roomSprites = roomOrientationSetup.RoomSprites;
         }
 
         private void GameContextCreated(GameContext context)
@@ -75,20 +78,12 @@ namespace UI.CardsUI
             
             int roomIndex = (int) card.RoomId;
             var sprite = roomIndex >= 1 ? cardSprites[roomIndex - 1] : null;
-            cardUI.InitCard(_cards.Count, sprite);
+            bool invertSprite = card.Connections.HasFlag(NodeConnections.Right) && !card.Connections.HasFlag(NodeConnections.Left);
+            cardUI.InitCard(_cards.Count, _roomSprites[card.Connections], invertSprite, sprite);
             cardUI.OnCardClicked += ClickedCard;
             cardUI.OnCardDrag += DragCard;
             cardUI.OnCardDrop += DropCard;
             _cards.Add(cardUI);
-            
-            foreach (var connection in card.Connections.GetDirections())
-            {
-                var orbGO = Instantiate(connectionOrbPrefab, cardUI.transform);
-                var position = _positionConvertor.TileToWorld(connection);
-                position.x *= 55f;
-                position.y *= 75f;
-                orbGO.transform.localPosition = position;
-            }
         }
         
         public void DragCard(CardUI cardUI, PointerEventData eventData)

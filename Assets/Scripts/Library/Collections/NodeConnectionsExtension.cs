@@ -96,6 +96,8 @@ namespace Library.Collections
             return TryGetNodeConnection(node1 - node2, out connection);
         }
 
+        public static NodeConnections ClampRange(this NodeConnections connections) => connections & NodeConnections.All;
+
         public static bool TryGetNodeConnection(Vector2Int direction, out NodeConnections connection)
         {
             connection = NodeConnections.None;

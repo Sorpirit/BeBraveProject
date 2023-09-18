@@ -14,7 +14,7 @@ namespace Core.Data.Rooms
 
         public Vector2Int Position => _position;
 
-        public NodeConnections Connections => _connections;
+        public NodeConnections Connections => _connections.ClampRange();
 
         public Room(Vector2Int position, NodeConnections connections)
         {

@@ -9,7 +9,10 @@ namespace UI
     {
         [SerializeField] private PlacementPreview _placementPreview;
         [SerializeField] private PlayerHandUIManager _playerHandUIManager;
-
+        [SerializeField] private GameObject startGamePanel;
+        [SerializeField] private GameObject gameOverPanel;
+        
+        
         private void Awake()
         {
             GameRunner.Instance.OnGameContextCreated += GameContextCreated;
@@ -24,6 +27,11 @@ namespace UI
             context.PlaceRoomState.OnStateEnter += () => context.PlaceRoomState.Trigger();
             context.PlayerEnterRoomState.OnStateEnter += () => context.PlayerEnterRoomState.Trigger();
             context.GameStartState.OnStateEnter += GameStart;
+
+            gameOverPanel.SetActive(false);
+            startGamePanel.SetActive(true);
+            
+            context.FinishGame.OnStateEnter += () => gameOverPanel.SetActive(true);
         }
 
         private void GameStart()
@@ -35,7 +43,13 @@ namespace UI
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space) && !GameRunner.Instance.Context.IsGameStarted)
-                GameRunner.Instance.StartGame();
+                StartGame();
+        }
+
+        public void StartGame()
+        {
+            startGamePanel.SetActive(false);
+            GameRunner.Instance.StartGame();
         }
     }
 }

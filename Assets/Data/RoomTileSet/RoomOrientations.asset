@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2154b4f93474b469cf7a64af4a97c04, type: 3}
+  m_Name: RoomOrientations
+  m_EditorClassIdentifier: 
+  roomOrientations:
+  - Connections: 12
+    Prefab: {fileID: 2544809625508875765, guid: 2cbebdaad4ca9074e910120a5c3e1cd8, type: 3}
+    Sprite: {fileID: 21300000, guid: afbee07a046db9b4698b95e5f0802838, type: 3}
+  - Connections: 9
+    Prefab: {fileID: 2544809625508875765, guid: fc68a517167febe46841e06e42f3aa44, type: 3}
+    Sprite: {fileID: 21300000, guid: 30397a24546e56f42988416328df839d, type: 3}
+  - Connections: 13
+    Prefab: {fileID: 2544809625508875765, guid: 70f1b661f252b3142840c2265943f9b0, type: 3}
+    Sprite: {fileID: 21300000, guid: b8fb7c70a00602147a92df5d5686b030, type: 3}
+  - Connections: 6
+    Prefab: {fileID: 2544809625508875765, guid: 896119167ae9425428eccdadccc81c4c, type: 3}
+    Sprite: {fileID: 21300000, guid: afbee07a046db9b4698b95e5f0802838, type: 3}
+  - Connections: 10
+    Prefab: {fileID: 2544809625508875765, guid: 1f725e0e82010a84c98b757e732e5910, type: 3}
+    Sprite: {fileID: 21300000, guid: 58d110421b6b7f845b8d1c11d2db6deb, type: 3}
+  - Connections: 14
+    Prefab: {fileID: 2544809625508875765, guid: 734624e7dac032546a7b9f807be1a52f, type: 3}
+    Sprite: {fileID: 21300000, guid: 239a0acffdcaded409ed4543a623e0f9, type: 3}
+  - Connections: 11
+    Prefab: {fileID: 2544809625508875765, guid: 425bcd8041ef53641a8a502f517b350b, type: 3}
+    Sprite: {fileID: 21300000, guid: 78aeeab8c5a81904493bbde84b13b623, type: 3}
+  - Connections: -1
+    Prefab: {fileID: 2544809625508875765, guid: 750420c338cca524c9bcbfc5e8c7d493, type: 3}
+    Sprite: {fileID: 21300000, guid: 2ffb33fea3c783449bb8f3c590acfb9e, type: 3}
+  - Connections: 3
+    Prefab: {fileID: 2544809625508875765, guid: f7e128caffd922242bd0f254d28c156d, type: 3}
+    Sprite: {fileID: 21300000, guid: 30397a24546e56f42988416328df839d, type: 3}
+  - Connections: 7
+    Prefab: {fileID: 2544809625508875765, guid: 05b59a0406321ba4db8f83989bfae323, type: 3}
+    Sprite: {fileID: 21300000, guid: b8fb7c70a00602147a92df5d5686b030, type: 3}

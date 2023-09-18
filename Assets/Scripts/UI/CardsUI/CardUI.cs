@@ -56,12 +56,21 @@ namespace UI.CardsUI
             _originalPosition = transform.position;
         }
 
-        public void InitCard(int cardIndex, [CanBeNull] Sprite sprite)
+        public void InitCard(int cardIndex, Sprite roomSprite, bool inverseRoomSprite, [CanBeNull] Sprite contentSprite)
         {
             Index = cardIndex;
-            if(sprite != null)
+            image.sprite = roomSprite;
+            
+            if (inverseRoomSprite)
             {
-                iconImage.sprite = sprite;
+                var scale = image.transform.localScale;
+                scale.x *= -1;
+                image.transform.localScale = scale;
+            }
+            
+            if(contentSprite != null)
+            {
+                iconImage.sprite = contentSprite;
                 iconImage.color = Color.black;
             }
         }

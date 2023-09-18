@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Data.Rooms;
 using Core.RoomsSystem;
 using Core.RoomsSystem.RoomVariants;
+using Game.Data;
 using Library.Collections;
 using Scripts.DependancyInjector;
 using UnityEngine;
@@ -12,25 +13,24 @@ namespace Game.RoomFactories
 {
     public class RoomFactory: MonoBehaviour, IRoomFactory, IFactoryAggregator
     {
-        [SerializeField] private GameObject EmptyRoomPrefab;
-        [SerializeField] private PathWayOrb PathWayOrbPrefab;
+        [SerializeField] private RoomOrientationSetupSO roomOrientationSetup;
         
         [Inject]
         private IRoomPositionConvertor _positionConvertor;
         
-        private Dictionary<RoomId, IRoomContentFactory> _factories = new();
+        private readonly Dictionary<RoomId, IRoomContentFactory> _factories = new();
+        private Dictionary<NodeConnections, GameObject> _roomPrefabs;
         
+        private void Start()
+        {
+            _roomPrefabs = roomOrientationSetup.RoomPrefabs;
+        }
+
         public IRoomContent CreateRoom(RoomId id, Room room)
         {
             var position = _positionConvertor.TileToWorld(room.Position);
-            var tile = Instantiate(EmptyRoomPrefab, position, Quaternion.identity);
+            var tile = Instantiate(_roomPrefabs[room.Connections], position, Quaternion.identity);
 
-            foreach (var direction in room.Connections.GetDirections())
-            {
-                var orb = Instantiate(PathWayOrbPrefab, tile.transform);
-                orb.transform.localPosition = _positionConvertor.TileToWorld(direction) / 2f;
-            }
-            
             if (id == RoomId.Empty)
                 return new EmptyRoomContent();
 

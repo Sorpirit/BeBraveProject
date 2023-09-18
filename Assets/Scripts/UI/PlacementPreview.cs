@@ -1,4 +1,7 @@
+using System.Collections.Generic;
 using Game;
+using Game.Data;
+using Library.Collections;
 using Scripts.DependancyInjector;
 using UnityEngine;
 
@@ -6,15 +9,19 @@ namespace UI
 {
     public class PlacementPreview : MonoBehaviour
     {
-        [SerializeField] private GameObject previewRoom;
-
+        [SerializeField] private PlacementPreviewCard previewRoom;
+        [SerializeField] private RoomOrientationSetupSO roomOrientationSetupSo;
+        
         [Inject]
         private IRoomPositionConvertor _positionConvertor;
         
-        private GameObject[] _previews;
+        private PlacementPreviewCard[] _previews;
 
+        private Dictionary<NodeConnections, Sprite> _roomSprites;
+        
         private void Awake()
         {
+            _roomSprites = roomOrientationSetupSo.RoomSprites;
             InitPreviews(4);
         }
 
@@ -33,17 +40,19 @@ namespace UI
             {
                 var position = availablePlaces[i];
                 _previews[i].transform.position = _positionConvertor.TileToWorld(position);
-                _previews[i].SetActive(true);
+                bool invertSprite = card.Connections.HasFlag(NodeConnections.Right) && !card.Connections.HasFlag(NodeConnections.Left);
+                _previews[i].SetSprite(_roomSprites[card.Connections], invertSprite);
+                _previews[i].gameObject.SetActive(true);
             }
         }
 
         private void InitPreviews(int count)
         {
-            _previews = new GameObject[count];
+            _previews = new PlacementPreviewCard[count];
             for (int i = 0; i < count; i++)
             {
-                _previews[i] = Instantiate(previewRoom, Vector3.zero, Quaternion.identity, transform);
-                _previews[i].SetActive(false);
+                _previews[i] = Instantiate(previewRoom.gameObject, Vector3.zero, Quaternion.identity, transform).GetComponent<PlacementPreviewCard>();
+                _previews[i].gameObject.SetActive(false);
             }
         }
 
@@ -51,7 +60,7 @@ namespace UI
         {
             for (int i = 0; i < _previews.Length; i++)
             {
-                _previews[i].SetActive(false);
+                _previews[i].gameObject.SetActive(false);
             }
         }
     }
