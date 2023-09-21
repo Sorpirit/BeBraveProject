@@ -1,3 +1,4 @@
+using Library.GameFlow.StateSystem;
 using UnityEngine.Assertions;
 
 namespace Core.GameStates
@@ -5,14 +6,16 @@ namespace Core.GameStates
     public abstract class TriggerGameState : BasicMonoGameState, ITriggerTransition
     {
         protected abstract IState _nextState { get; }
-
-        public TriggerGameState(GameContext context) : base(context) { }
+        
+        protected TriggerGameState(GameContext context, IStateSwitcher stateSwitcher) : base(context, stateSwitcher)
+        {
+        }
 
         public virtual void Trigger()
         {
             Assert.IsTrue(_isStateActive);
             Assert.IsNotNull(_nextState);
-            _context.ChangeState(_nextState);
+            _stateSwitcher.ChangeState(_nextState);
         }
     }
 }

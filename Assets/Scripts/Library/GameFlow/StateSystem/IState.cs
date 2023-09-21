@@ -1,6 +1,6 @@
 using System;
 
-namespace Core.GameStates
+namespace Library.GameFlow.StateSystem
 {
     public interface IState
     {

@@ -1,13 +1,15 @@
+using Library.GameFlow.StateSystem;
 using UnityEngine.Assertions;
 
 namespace Core.GameStates.States
 {
     public class EnterRoomState : BasicMonoGameState, ITriggerTransition
     {
-        private IState _nextState => _context.TakeCardState;
-        private IState _finishGame => _context.FinishGame;
+        public IState NextState { get; set; }
+
+        public IState FinishGame { get; set; }
         
-        public EnterRoomState(GameContext context) : base(context)
+        public EnterRoomState(GameContext context, IStateSwitcher stateSwitcher) : base(context, stateSwitcher)
         {
         }
 
@@ -21,9 +23,9 @@ namespace Core.GameStates.States
         public virtual void Trigger()
         {
             Assert.IsTrue(_isStateActive);
-            Assert.IsNotNull(_nextState);
-            Assert.IsNotNull(_finishGame);
-            _context.ChangeState(_context.Player.HealthSystem.IsDead ? _finishGame : _nextState);
+            Assert.IsNotNull(NextState);
+            Assert.IsNotNull(FinishGame);
+            _stateSwitcher.ChangeState(_context.IsGameFinished ? FinishGame : NextState);
         }
     }
 }

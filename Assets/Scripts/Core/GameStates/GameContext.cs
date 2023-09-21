@@ -3,13 +3,15 @@ using Core.Data.Rooms;
 using Core.PlayerSystems;
 using Core.RoomsSystem;
 using JetBrains.Annotations;
+using Library.GameFlow.StateSystem;
 using UnityEngine.Assertions;
 
 namespace Core.GameStates
 {
-    public class GameContext : IStatesContext
+    public class GameContext
     {
         private bool _isGameStarted;
+        private bool _gameOver;
         private Deck _deck;
         private Dungeon _map;
         private PlayerHand _hand;
@@ -23,45 +25,12 @@ namespace Core.GameStates
         public PlayerPawn Player => _player;
         public IRoomFactory RoomFactory => _roomFactory;
         
-        public IState GameStartState { get; private set; }
-        public IState FinishGame { get; private set; }
-        public IState CheckCardValidity { get; set; }
-
-        public ICardPlacer PlayCardState { get; private set; }
-        public IDropCard DropCardState { get; private set; }
-        public ITriggerTransition PlaceRoomState { get; private set; }
-        public ITriggerTransition PlayerMoveState { get; private set; }
-        public ITriggerTransition PlayerEnterRoomState { get; private set; }
-        public ITriggerTransition TakeCardState { get; private set; }
-        
         public RoomCard? UsedRoomCard { get; set; }
         public Room? CurrentRoom { get; set; }
         [CanBeNull] public IRoomContent CurrentRoomContent { get; set; }
+
+        public bool IsGameFinished => _player.HealthSystem.IsDead || _gameOver;
         
-
-        private IState _currentState;
-
-        public void SetStates(IState gameStartState, IState finishGame, IState checkCardValidity, ICardPlacer playCardState, IDropCard dropCardState, ITriggerTransition placeRoomState, ITriggerTransition playerMoveState, ITriggerTransition playerEnterRoomState, ITriggerTransition takeCardState)
-        {
-            GameStartState = gameStartState;
-            FinishGame = finishGame;
-            CheckCardValidity = checkCardValidity;
-            PlayCardState = playCardState;
-            DropCardState = dropCardState;
-            PlaceRoomState = placeRoomState;
-            PlayerMoveState = playerMoveState;
-            PlayerEnterRoomState = playerEnterRoomState;
-            TakeCardState = takeCardState;
-        }
-
-        public void ChangeState(IState state)
-        {
-            Assert.IsTrue(_currentState != state);
-            _currentState?.ExitState();
-            _currentState = state;
-            _currentState.EnterState();
-        }
-
         public void InitContext(Deck deck, Dungeon map, PlayerHand hand, PlayerPawn player, IRoomFactory roomFactory)
         {
             _deck = deck;
@@ -74,6 +43,11 @@ namespace Core.GameStates
         public void StartGame()
         {
             _isGameStarted = true;
+        }
+
+        public void GameOver()
+        {
+            _gameOver = true;
         }
     }
 }

@@ -17,12 +17,12 @@ namespace UI
 
         private void Awake()
         {
-            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            GameRunner.Instance.OnGameInitFinished += GameInitFinished;
         }
 
-        private void GameContextCreated(GameContext context)
+        private void GameInitFinished(GameContext context, GameCommander commander)
         {
-            context.PlayerEnterRoomState.OnStateEnter += ExitEmptyRoom;
+            commander.PlayerEnterRoomState.OnStateEnter += ExitEmptyRoom;
         }
 
         private void Start()
@@ -41,7 +41,7 @@ namespace UI
                 return;
 
             _emptyRoom = false;
-            GameRunner.Instance.Context.PlayerEnterRoomState.Trigger();
+            GameRunner.Instance.Commander.PlayerEnterRoomState.Trigger();
         }
     }
 }

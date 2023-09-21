@@ -32,7 +32,7 @@ namespace UI
         
         private void Awake()
         {
-            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            GameRunner.Instance.OnGameInitFinished += GameInitFinished;
         }
         
         private void Start()
@@ -42,9 +42,9 @@ namespace UI
             fightEncounterContextCallback.OnRoomContentCreated += OnRoomContentCreated;
         }
 
-        private void GameContextCreated(GameContext context)
+        private void GameInitFinished(GameContext context, GameCommander commander)
         {
-            context.PlayerEnterRoomState.OnStateEnter += OnPlayerEnterRoom;
+            commander.PlayerEnterRoomState.OnStateEnter += OnPlayerEnterRoom;
         }
 
         private void OnPlayerEnterRoom()
@@ -79,7 +79,7 @@ namespace UI
             sequence
                 .Append(player.transform.DOMove(playerOriginalPosition, moveDuration))
                 .Join(cameraEffects.ZoomOut())
-                .OnComplete(() => GameRunner.Instance.Context.PlayerEnterRoomState.Trigger());
+                .OnComplete(() => GameRunner.Instance.Commander.PlayerEnterRoomState.Trigger());
         }
 
         private void OnFightRoundFinished()

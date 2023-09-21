@@ -16,12 +16,12 @@ namespace UI
         
         private void Awake()
         {
-            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            GameRunner.Instance.OnGameInitFinished += GameInitFinished;
         }
 
-        private void GameContextCreated(GameContext context)
+        private void GameInitFinished(GameContext context, GameCommander commander)
         {
-            context.PlayerMoveState.OnStateEnter += MovePlayer;
+            commander.PlayerMoveState.OnStateEnter += MovePlayer;
         }
 
         private void MovePlayer()
@@ -35,7 +35,7 @@ namespace UI
 
         private void FinishMoving()
         {
-            GameRunner.Instance.Context.PlayerMoveState.Trigger();
+            GameRunner.Instance.Commander.PlayerMoveState.Trigger();
         }
     }
 }

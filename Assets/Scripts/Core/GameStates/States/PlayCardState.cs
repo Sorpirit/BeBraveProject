@@ -1,5 +1,6 @@
 using System;
 using Core.Data.Rooms;
+using Library.GameFlow.StateSystem;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -7,10 +8,12 @@ namespace Core.GameStates.States
 {
     public class PlayCardState : BasicMonoGameState, ICardPlacer
     {
+        public IState NextState { get; set; }
+        
         public event Action<Room> OnRoomPlaced; 
         public event Action<Vector2Int, int> OnPlacementFailed;
         
-        public PlayCardState(GameContext context) : base(context)
+        public PlayCardState(GameContext context, IStateSwitcher stateSwitcher) : base(context, stateSwitcher)
         {
         }
         
@@ -31,7 +34,7 @@ namespace Core.GameStates.States
             _context.UsedRoomCard = roomCard;
             OnRoomPlaced?.Invoke(room);
             _context.Hand.PlayCard(handCardIndex);
-            _context.ChangeState(_context.PlaceRoomState);
+            _stateSwitcher.ChangeState(NextState);
             return true;
         }
     }

@@ -20,13 +20,13 @@ namespace UI
         
         private void Awake()
         {
-            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            GameRunner.Instance.OnGameInitFinished += GameInitFinished;
         }
 
-        private void GameContextCreated(GameContext context)
+        private void GameInitFinished(GameContext context, GameCommander commander)
         {
-            context.PlayCardState.OnStateEnter += () => _isPlacingRoom = true;
-            context.PlayCardState.OnStateExit += () => _isPlacingRoom = false;
+            commander.PlayCardState.OnStateEnter += () => _isPlacingRoom = true;
+            commander.PlayCardState.OnStateExit += () => _isPlacingRoom = false;
             
             _playerHandUIManager.TryPlace = TryPlace;
         }
@@ -52,7 +52,7 @@ namespace UI
             
             Vector3 pointerWorldPosition = _camera.ScreenToWorldPoint(pointerScreenPosition);
             Vector2Int tilePosition = _positionConvertor.WorldToTile(pointerWorldPosition);
-            return GameRunner.Instance.Context.PlayCardState.PlaceRoom(tilePosition, selectedCardIndex);
+            return GameRunner.Instance.Commander.PlayCardState.PlaceRoom(tilePosition, selectedCardIndex);
         }
     }
 }

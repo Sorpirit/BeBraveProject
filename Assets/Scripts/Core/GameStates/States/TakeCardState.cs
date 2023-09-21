@@ -1,13 +1,17 @@
 using System;
+using Library.GameFlow.StateSystem;
 using UnityEngine;
 
 namespace Core.GameStates.States
 {
     public class TakeCardState : TriggerGameState
     {
-        protected override IState _nextState => _context.CheckCardValidity;
+        public IState FinishGame { get; set; }
+        public IState NextState { get; set; }
+
+        protected override IState _nextState => NextState;
         
-        public TakeCardState(GameContext context) : base(context)
+        public TakeCardState(GameContext context, IStateSwitcher stateSwitcher) : base(context, stateSwitcher)
         {
         }
         
@@ -27,12 +31,14 @@ namespace Core.GameStates.States
             else if(_context.Hand.Cards.Count == 0)
             {
                 Debug.Log("Game over!");
-                _context.ChangeState(_context.FinishGame);
+                _stateSwitcher.ChangeState(FinishGame);
             }
             else
             {
                 Trigger();
             }
         }
+
+        
     }
 }

@@ -15,28 +15,28 @@ namespace UI
         
         private void Awake()
         {
-            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            GameRunner.Instance.OnGameInitFinished += GameInitFinished;
 
             _playerHandUIManager.OnSelectionChanged += _placementPreview.UpdatePreviews;
         }
 
-        private void GameContextCreated(GameContext context)
+        private void GameInitFinished(GameContext context, GameCommander commander)
         {
-            context.PlayCardState.OnStateEnter += () => _placementPreview.UpdatePreviews(_playerHandUIManager.SelectedCardIndex);
+            commander.PlayCardState.OnStateEnter += () => _placementPreview.UpdatePreviews(_playerHandUIManager.SelectedCardIndex);
             
-            context.PlaceRoomState.OnStateEnter += () => context.PlaceRoomState.Trigger();
-            context.GameStartState.OnStateEnter += GameStart;
+            commander.PlaceRoomState.OnStateEnter += () => commander.PlaceRoomState.Trigger();
+            commander.GameStartState.OnStateEnter += GameStart;
 
             gameOverPanel.SetActive(false);
             startGamePanel.SetActive(true);
             
-            context.FinishGame.OnStateEnter += () => gameOverPanel.SetActive(true);
+            commander.FinishGame.OnStateEnter += () => gameOverPanel.SetActive(true);
         }
 
         private void GameStart()
         {
             GameContext context = GameRunner.Instance.Context;
-            context.Hand.OnCardAdded += (card) => context.TakeCardState.Trigger();
+            context.Hand.OnCardAdded += (card) => GameRunner.Instance.Commander.TakeCardState.Trigger();
         }
 
         private void Update()

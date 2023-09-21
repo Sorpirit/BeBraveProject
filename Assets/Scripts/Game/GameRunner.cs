@@ -16,9 +16,11 @@ namespace Game
         [SerializeField] private CardSet set;
 
         private GameContext _context;
+        private GameCommander _commander;
 
-        public event Action<GameContext> OnGameContextCreated;
+        public event Action<GameContext, GameCommander> OnGameInitFinished;
         public GameContext Context => _context;
+        public GameCommander Commander => _commander;
 
         private void Awake()
         {
@@ -34,13 +36,22 @@ namespace Game
 
         private void Start()
         {
-            _context = GameStateSetup.CreateBasicGame(set, _roomFactory);
-            OnGameContextCreated?.Invoke(_context);
+            var gameSetup = new GameSetup
+            {
+                CardSet = set,
+                RoomFactory = _roomFactory,
+                MaxCardsInHand = 3,
+                MaxPlayerHealth = 30
+            };
+            
+            _context = new GameContext();
+            _commander = GameStateSetup.SetupStates(gameSetup, _context);
+            OnGameInitFinished?.Invoke(_context, _commander);
         }
 
         public void StartGame()
         {
-            _context.ChangeState(_context.GameStartState);
+            _commander.ChangeState(_commander.GameStartState);
         }
     }
 }

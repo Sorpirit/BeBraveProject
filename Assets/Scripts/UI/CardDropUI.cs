@@ -10,13 +10,13 @@ namespace UI
 
         private void Awake()
         {
-            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            GameRunner.Instance.OnGameInitFinished += GameInitFinished;
         }
 
-        private void GameContextCreated(GameContext context)
+        private void GameInitFinished(GameContext context, GameCommander commander)
         {
-            context.DropCardState.OnStateEnter += () => _isDroppingCard = true;
-            context.DropCardState.OnStateExit += () => _isDroppingCard = false;
+            commander.DropCardState.OnStateEnter += () => _isDroppingCard = true;
+            commander.DropCardState.OnStateExit += () => _isDroppingCard = false;
         }
 
         private void Update()
@@ -26,7 +26,7 @@ namespace UI
             
             if (Input.GetMouseButtonDown(0))
             {
-                GameRunner.Instance.Context.DropCardState.DropCard(0);
+                GameRunner.Instance.Commander.DropCardState.DropCard(0);
             }
         }
     }

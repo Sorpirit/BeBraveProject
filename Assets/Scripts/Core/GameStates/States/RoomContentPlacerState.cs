@@ -1,12 +1,15 @@
+using Library.GameFlow.StateSystem;
 using UnityEngine.Assertions;
 
 namespace Core.GameStates.States
 {
     public class RoomContentPlacerState : TriggerGameState
     {
-        protected override IState _nextState => _context.PlayerMoveState;
+        public IState NextState { get; set; }
         
-        public RoomContentPlacerState(GameContext context) : base(context)
+        protected override IState _nextState => NextState;
+
+        public RoomContentPlacerState(GameContext context, IStateSwitcher stateSwitcher) : base(context, stateSwitcher)
         {
         }
 

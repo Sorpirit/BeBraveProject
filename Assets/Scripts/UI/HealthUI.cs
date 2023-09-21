@@ -18,12 +18,12 @@ namespace UI
         
         private void Awake()
         {
-            GameRunner.Instance.OnGameContextCreated += GameContextCreated;
+            GameRunner.Instance.OnGameInitFinished += GameInitFinished;
         }
 
-        private void GameContextCreated(GameContext context)
+        private void GameInitFinished(GameContext context, GameCommander commander)
         {
-            context.GameStartState.OnStateEnter += GameStart;
+            commander.GameStartState.OnStateEnter += GameStart;
         }
 
         private void GameStart()

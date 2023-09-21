@@ -3,6 +3,7 @@ using Core.Data.Rooms;
 using Core.Data.Scriptable;
 using Core.PlayerSystems;
 using Core.RoomsSystem;
+using Library.GameFlow.StateSystem;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -10,23 +11,23 @@ namespace Core.GameStates.States
 {
     public class GameStartState : BasicMonoGameState
     {
-        private readonly CardSet _set;
-        private readonly IRoomFactory _roomFactory;
-
-        public GameStartState(GameContext context, CardSet set, IRoomFactory roomFactory) : base(context)
+        public IState NextState { get; set; }
+        
+        private readonly GameSetup _setup;
+        
+        public GameStartState(GameSetup setup, GameContext context, IStateSwitcher stateSwitcher) : base(context, stateSwitcher)
         {
-            _set = set;
-            _roomFactory = roomFactory;
+            _setup = setup;
         }
 
         public override void EnterState()
         {
-            var deck = new Deck(_set);
+            var deck = new Deck(_setup.CardSet);
             var map = new Dungeon();
-            var hand = new PlayerHand(3);
-            var player = new PlayerPawn(new StandardHealthSystem(32));
+            var hand = new PlayerHand(_setup.MaxCardsInHand);
+            var player = new PlayerPawn(new StandardHealthSystem(_setup.MaxPlayerHealth));
 
-            _context.InitContext(deck, map, hand, player, _roomFactory);
+            _context.InitContext(deck, map, hand, player, _setup.RoomFactory);
             
             var startRoom = _context.Map.InitRoom(Vector2Int.zero);
             var startContentRoom = _context.RoomFactory.CreateRoom(RoomId.Empty, startRoom);
@@ -43,7 +44,7 @@ namespace Core.GameStates.States
             _context.StartGame();
             base.EnterState();
             
-            _context.ChangeState(_context.PlayCardState);
+            _stateSwitcher.ChangeState(NextState);
         }
     }
 }

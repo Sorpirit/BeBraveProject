@@ -1,11 +1,16 @@
+using Library.GameFlow.StateSystem;
+
 namespace Core.GameStates.States
 {
     public class CheckCardsValid : BasicMonoGameState
     {
-        public CheckCardsValid(GameContext context) : base(context)
+        public IState PlayCardState { get; set; }
+        public IState DropCardState { get; set; }
+        
+        public CheckCardsValid(GameContext context, IStateSwitcher stateSwitcher) : base(context, stateSwitcher)
         {
         }
-
+        
         public override void EnterState()
         {
             base.EnterState();
@@ -25,11 +30,11 @@ namespace Core.GameStates.States
 
             if (hasValidCard)
             {
-                _context.ChangeState(_context.PlayCardState);
+                _stateSwitcher.ChangeState(PlayCardState);
             }
             else
             {
-                _context.ChangeState(_context.DropCardState);
+                _stateSwitcher.ChangeState(DropCardState);
             }
         }
     }
