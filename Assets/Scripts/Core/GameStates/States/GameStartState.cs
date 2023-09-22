@@ -22,7 +22,7 @@ namespace Core.GameStates.States
 
         public override void EnterState()
         {
-            var deck = new Deck(_setup.CardSet);
+            var deck = new Deck(_setup.CardSet.Cards);
             var map = new Dungeon();
             var hand = new PlayerHand(_setup.MaxCardsInHand);
             var player = new PlayerPawn(new StandardHealthSystem(_setup.MaxPlayerHealth));

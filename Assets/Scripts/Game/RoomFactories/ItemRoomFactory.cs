@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Data.Items;
 using Core.Data.Rooms;
 using Core.RoomsSystem;
+using Core.RoomsSystem.RoomVariants;
 using Scripts.DependancyInjector;
 using UnityEngine;
 

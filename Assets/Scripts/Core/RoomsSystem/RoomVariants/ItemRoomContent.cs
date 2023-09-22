@@ -1,9 +1,8 @@
+using System;
 using Core.Data.Items;
 using Core.PlayerSystems;
-using Core.RoomsSystem;
-using System;
 
-namespace Core.Data.Rooms
+namespace Core.RoomsSystem.RoomVariants
 {
     public class ItemRoomContent : IRoomContent
     {

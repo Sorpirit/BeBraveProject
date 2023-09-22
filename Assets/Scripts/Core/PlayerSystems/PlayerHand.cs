@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Core.Data;
 using UnityEngine.Assertions;
 
-namespace Core.Data
+namespace Core.PlayerSystems
 {
     public class PlayerHand
     {

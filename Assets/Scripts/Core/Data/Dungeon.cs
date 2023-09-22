@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Core.Data.Rooms;
 using Library.Collections;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace Core.Data
 {
@@ -14,8 +12,7 @@ namespace Core.Data
         public event Action<Vector2Int, Room> OnRoomPlaced; 
         
         private readonly Grid<Room> _grid = new();
-
-
+        
         public Room InitRoom(Vector2Int position)
         {
             Room room = new Room(position, NodeConnectionsExtension.AllDirections);
@@ -50,20 +47,6 @@ namespace Core.Data
 
             OnRoomPlaced?.Invoke(position, room);
             return true;
-        }
-
-        public ReadOnlySpan<Vector2Int> GetAvailablePlaces(NodeConnections connections)
-        {
-            HashSet<Vector2Int> availablePositions = new HashSet<Vector2Int>();
-            foreach ((Vector2Int nodePosition, NodeConnections freeConnections) in _grid.GetEdgeNodes(connections))
-            {
-                foreach (var direction in freeConnections.GetDirections())
-                {
-                    availablePositions.Add(nodePosition + direction);
-                }
-            }
-
-            return new ReadOnlySpan<Vector2Int>(availablePositions.ToArray());
         }
         
         public ReadOnlySpan<Vector2Int> GetAvailablePlacesAt(Vector2Int position, NodeConnections connections)

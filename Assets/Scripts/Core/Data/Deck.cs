@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Core.Data.Rooms;
 using Core.Data.Scriptable;
 using Library.Collections;
-using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Core.Data
@@ -15,9 +13,9 @@ namespace Core.Data
         
         private readonly List<RoomCard> _deck;
         
-        public Deck(CardSet set)
+        public Deck(List<RoomCard> cards)
         {
-            _deck = new List<RoomCard>(set.Cards);
+            _deck = new List<RoomCard>(cards);
         }
 
         public void Shuffle()
