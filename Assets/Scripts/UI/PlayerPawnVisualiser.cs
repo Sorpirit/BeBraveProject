@@ -10,7 +10,8 @@ namespace UI
     public class PlayerPawnVisualiser : MonoBehaviour
     {
         [SerializeField] private float animationDuration;
-
+        [SerializeField] private Ease animationEase;
+        
         [Inject]
         private IRoomPositionConvertor _positionConvertor;
         
@@ -30,7 +31,9 @@ namespace UI
             Assert.IsTrue(_positionConvertor != null);
             var moveTo = _positionConvertor.TileToWorld(GameRunner.Instance.Context.CurrentRoom.Value.Position);
             transform
-                .DOMove(moveTo, animationDuration).OnComplete(FinishMoving);
+                .DOMove(moveTo, animationDuration)
+                .SetEase(animationEase)
+                .OnComplete(FinishMoving);
         }
 
         private void FinishMoving()
