@@ -32,9 +32,9 @@ namespace Tests.CoreTest.Data
         {
             Dungeon dungeon = InitDungeon(out var initRoom);
             
-            RoomCard roomCard = new RoomCard(RoomId.Empty, NodeConnections.All);
+            var room = new Room(new Vector2Int(0, 1), NodeConnections.All);
             
-            bool result = dungeon.PlaceRoom(new Vector2Int(0, 1), roomCard, initRoom, out var room);
+            bool result = dungeon.TryPlaceRoom(room, initRoom);
             Assert.IsTrue(result);
         }
 
@@ -44,9 +44,9 @@ namespace Tests.CoreTest.Data
             Dungeon dungeon = SetupBasicDungeon();
             Room testConnectedRoom = new Room(new Vector2Int(-1, 1), NodeConnections.None);
             
-            RoomCard roomCard = new RoomCard(RoomId.Empty, NodeConnections.Down | NodeConnections.Right);
+            var room = new Room(new Vector2Int(-1, 2), NodeConnections.Down | NodeConnections.Right);
             
-            bool result = dungeon.PlaceRoom(new Vector2Int(-1, 2), roomCard, testConnectedRoom, out var room);
+            bool result = dungeon.TryPlaceRoom(room, testConnectedRoom);
             Assert.IsTrue(result);
         }
 
@@ -56,9 +56,9 @@ namespace Tests.CoreTest.Data
             Dungeon dungeon = SetupBasicDungeon();
             Room testConnectedRoom = new Room(new Vector2Int(-1, 1), NodeConnections.None);
             
-            RoomCard roomCard = new RoomCard(RoomId.Empty, NodeConnections.Down | NodeConnections.Right);
+            var room = new Room(new Vector2Int(0, 2), NodeConnections.Down | NodeConnections.Right);
             
-            bool result = dungeon.PlaceRoom(new Vector2Int(0, 2), roomCard, testConnectedRoom, out var room);
+            bool result = dungeon.TryPlaceRoom(room, testConnectedRoom);
             Assert.IsFalse(result);
         }
         
@@ -68,9 +68,9 @@ namespace Tests.CoreTest.Data
             Dungeon dungeon = SetupBasicDungeon();
             Room testConnectedRoom = new Room(new Vector2Int(-1, 1), NodeConnections.None);
             
-            RoomCard roomCard = new RoomCard(RoomId.Empty, NodeConnections.Down | NodeConnections.Right);
+            var room = new Room(new Vector2Int(0, 2), NodeConnections.Down | NodeConnections.Right);
             
-            bool result = dungeon.PlaceRoom(new Vector2Int(-1, 0), roomCard, testConnectedRoom, out var room);
+            bool result = dungeon.TryPlaceRoom(room, testConnectedRoom);
             Assert.IsFalse(result);
         }
         
@@ -80,9 +80,9 @@ namespace Tests.CoreTest.Data
             Dungeon dungeon = SetupBasicDungeon();
             Room testConnectedRoom = new Room(new Vector2Int(-1, 1), NodeConnections.None);
             
-            RoomCard roomCard = new RoomCard(RoomId.Empty, NodeConnections.Down | NodeConnections.Right);
+            var room = new Room(new Vector2Int(0, 1), NodeConnections.Down | NodeConnections.Right);
             
-            bool result = dungeon.PlaceRoom(new Vector2Int(0, 1), roomCard, testConnectedRoom, out var room);
+            bool result = dungeon.TryPlaceRoom(room, testConnectedRoom);
             Assert.IsFalse(result);
         }
 
@@ -92,9 +92,9 @@ namespace Tests.CoreTest.Data
             Dungeon dungeon = SetupBasicDungeon();
             Room testConnectedRoom = new Room(new Vector2Int(-1, 1), NodeConnections.None);
             
-            RoomCard roomCard = new RoomCard(RoomId.Empty, NodeConnections.Down | NodeConnections.Right);
+            var connections = NodeConnections.Down | NodeConnections.Right;
             
-            var availablePlaces = dungeon.GetAvailablePlacesAt(testConnectedRoom.Position, roomCard.Connections);
+            var availablePlaces = dungeon.GetAvailablePlacesAt(testConnectedRoom.Position, connections);
             Assert.AreEqual(1, availablePlaces.Length);
             Assert.AreEqual(new Vector2Int(-1, 2), availablePlaces[0]);
             
@@ -117,11 +117,11 @@ namespace Tests.CoreTest.Data
             Dungeon dungeon = new Dungeon();
             
             var initRoom = dungeon.InitRoom(Vector2Int.zero);
-            var topRoom = new RoomCard(RoomId.Empty, NodeConnections.Left | NodeConnections.Up | NodeConnections.Down);
-            var topLeftRoom = new RoomCard(RoomId.Empty, NodeConnections.Right | NodeConnections.Up);
+            var topRoomConnections = new Room(new Vector2Int(0, 1), NodeConnections.Left | NodeConnections.Up | NodeConnections.Down);
+            var topLeftRoom = new Room(new Vector2Int(-1, 1), NodeConnections.Right | NodeConnections.Up);
             
-            dungeon.PlaceRoom(new Vector2Int(0, 1), topRoom, initRoom, out var room);
-            dungeon.PlaceRoom(new Vector2Int(-1, 1), topLeftRoom, room, out room);
+            dungeon.TryPlaceRoom(topRoomConnections, initRoom);
+            dungeon.TryPlaceRoom(topLeftRoom, topRoomConnections);
             
             return dungeon;
         }

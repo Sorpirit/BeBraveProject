@@ -28,7 +28,8 @@ namespace Core.GameStates.States
             switch (card)
             {
                 case RoomCard roomCard:
-                    bool result = _context.Map.PlaceRoom(tilePosition, roomCard, _context.CurrentRoom.Value, out var room);
+                    var room = new Room(tilePosition, roomCard.Connections);
+                    bool result = _context.Map.TryPlaceRoom(room, _context.CurrentRoom.Value);
                     if (!result)
                     {
                         Debug.Log("Unable to place room: " + roomCard);

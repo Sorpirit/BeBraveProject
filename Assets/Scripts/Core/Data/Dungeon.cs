@@ -22,17 +22,16 @@ namespace Core.Data
             return room;
         }
         
-        public bool PlaceRoom(Vector2Int position, RoomCard roomCard, Room connectedRoom, out Room room)
+        public bool TryPlaceRoom(Room room, Room connectedRoom)
         {
-            room = new Room(position, roomCard.Connections);
-            if (_grid.ContainsAt(position))
+            if (_grid.ContainsAt(room.Position))
                 return false;
             
             bool inPossiblePositions = false;
-            var possiblePositions = GetAvailablePlacesAt(connectedRoom.Position, roomCard.Connections);
+            var possiblePositions = GetAvailablePlacesAt(connectedRoom.Position, room.Connections);
             foreach(var possiblePosition in possiblePositions)
             {
-                if(possiblePosition.Equals(position))
+                if(possiblePosition.Equals(room.Position))
                 {
                     inPossiblePositions = true;
                     break;
@@ -42,11 +41,11 @@ namespace Core.Data
             if(!inPossiblePositions)
                 return false;
             
-            _grid.Add(position, room);
-            var connection = (connectedRoom.Position - position).ToSingleNodeConnection();
-            _grid.Connect(position, connection);
+            _grid.Add(room.Position, room);
+            var connection = (connectedRoom.Position - room.Position).ToSingleNodeConnection();
+            _grid.Connect(room.Position, connection);
 
-            OnRoomPlaced?.Invoke(position, room);
+            OnRoomPlaced?.Invoke(room.Position, room);
             return true;
         }
         
