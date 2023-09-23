@@ -34,15 +34,25 @@ namespace Game.RoomFactories
         {
             int enemyIndex = (int)id - (int) RoomId.BasicEnemy;
             var enemyGO = Instantiate(enemyPrefabs[enemyIndex], parentTile.transform);
+            var enemyValues = enemyGO.GetComponent<IEnemyValues>();
             IRoomContent roomContent;
             switch (id)
             {
                 case RoomId.BasicEnemy:
-                    var encounter = new FightEncounter(new BasicEnemy(basicEnemyMaxHp, basicEnemyDamage));
+                    var enemy = new BasicEnemy(basicEnemyMaxHp, basicEnemyDamage);
+                    var encounter = new FightEncounter(enemy);
                     _currentFight = encounter;
                     roomContent = encounter;
                     encounter.OnFightRoundFinished += TriggerFightRound;
                     encounter.OnEncounterFinished += TriggerFinishEncounter;
+                    
+                    enemyValues.
+                        SetDamage(enemy.Weapon.Damage);
+                    enemyValues.SetHealth(enemy.Health.Health);
+                    
+                    enemy.Weapon.DamageChanged += enemyValues.SetDamage;
+                    enemy.Health.OnHealthChanged += enemyValues.SetHealth;
+                    
                     break;
                 
                 default:

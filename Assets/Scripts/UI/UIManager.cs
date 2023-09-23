@@ -35,6 +35,7 @@ namespace UI
 
         private void GameStart()
         {
+            startGamePanel.SetActive(false);
             GameContext context = GameRunner.Instance.Context;
             context.Hand.OnCardAdded += (card) => GameRunner.Instance.Commander.TakeCardState.Trigger();
         }

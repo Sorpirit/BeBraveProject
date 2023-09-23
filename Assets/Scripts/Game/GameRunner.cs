@@ -15,6 +15,7 @@ namespace Game
 
         [Inject] private IRoomFactory _roomFactory;
 
+        [SerializeField] private bool autoPlay = true;
         [SerializeField] private bool deterministic;
         [SerializeField] private CardSetSO set;
 
@@ -25,6 +26,8 @@ namespace Game
         public GameContext Context => _context;
         public GameCommander Commander => _commander;
 
+        private bool _gameStarted;
+        
         private void Awake()
         {
             if (Instance == null)
@@ -57,8 +60,15 @@ namespace Game
             OnGameInitFinished?.Invoke(_context, _commander);
         }
 
+        private void Update()
+        {
+            if(!_gameStarted && autoPlay)
+                StartGame();
+        }
+
         public void StartGame()
         {
+            _gameStarted = true;
             _commander.ChangeState(_commander.GameStartState);
         }
     }
