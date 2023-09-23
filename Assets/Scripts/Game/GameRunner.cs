@@ -1,4 +1,5 @@
 using System;
+using Core.CardSystem.Data;
 using Core.Data.Scriptable;
 using Core.GameStates;
 using Core.RoomsSystem;
@@ -13,7 +14,7 @@ namespace Game
 
         [Inject] private IRoomFactory _roomFactory;
 
-        [SerializeField] private CardSet set;
+        [SerializeField] private CardSetSO set;
 
         private GameContext _context;
         private GameCommander _commander;

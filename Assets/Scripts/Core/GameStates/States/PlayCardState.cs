@@ -1,4 +1,6 @@
 using System;
+using Core.CardSystem.Data.Cards;
+using Core.Data;
 using Core.Data.Rooms;
 using Library.GameFlow.StateSystem;
 using UnityEngine;
@@ -21,18 +23,26 @@ namespace Core.GameStates.States
         {
             Assert.IsTrue(_isStateActive);
             Assert.IsTrue(_context.CurrentRoom.HasValue);
-            var roomCard = _context.Hand.GetCard(handCardIndex);
-            bool result = _context.Map.PlaceRoom(tilePosition, roomCard, _context.CurrentRoom.Value, out var room);
-            if (!result)
-            {
-                Debug.Log("Unable to place room: " + roomCard);
-                OnPlacementFailed?.Invoke(tilePosition, handCardIndex);
-                return false;
-            }
+            var card = _context.Hand.GetCard(handCardIndex);
 
-            _context.CurrentRoom = room;
-            _context.UsedRoomCard = roomCard;
-            OnRoomPlaced?.Invoke(room);
+            switch (card)
+            {
+                case RoomCard roomCard:
+                    bool result = _context.Map.PlaceRoom(tilePosition, roomCard, _context.CurrentRoom.Value, out var room);
+                    if (!result)
+                    {
+                        Debug.Log("Unable to place room: " + roomCard);
+                        OnPlacementFailed?.Invoke(tilePosition, handCardIndex);
+                        return false;
+                    }
+                    _context.CurrentRoom = room;
+                    _context.UsedRoomCard = roomCard;
+                    OnRoomPlaced?.Invoke(room);
+                    break;
+                default:
+                    throw new ArgumentException($"{card} card is unsupported for this state: {GetType()}");
+            }
+            
             _context.Hand.PlayCard(handCardIndex);
             _stateSwitcher.ChangeState(NextState);
             return true;

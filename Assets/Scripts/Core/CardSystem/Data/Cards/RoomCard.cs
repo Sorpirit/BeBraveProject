@@ -1,12 +1,11 @@
-using System;
 using Core.Data.Rooms;
 using Library.Collections;
 using UnityEngine;
 
-namespace Core.Data
+namespace Core.CardSystem.Data.Cards
 {
-    [Serializable]
-    public class RoomCard
+    [CreateAssetMenu(fileName = "NewRoomCard", menuName = "Core/CardSystem/CardSet")]
+    public class RoomCard : CardSO
     {
         [SerializeField] private RoomId roomId;
         [SerializeField] private NodeConnections connections;

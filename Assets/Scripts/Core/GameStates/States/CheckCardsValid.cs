@@ -1,3 +1,5 @@
+using Core.CardSystem.Data.Cards;
+using Core.Data;
 using Library.GameFlow.StateSystem;
 
 namespace Core.GameStates.States
@@ -18,7 +20,12 @@ namespace Core.GameStates.States
             bool hasValidCard = false;
             for (int i = 0; i < _context.Hand.Cards.Count; i++)
             {
-                var card = _context.Hand.GetCard(i);
+                var card = _context.Hand.GetCard(i) as RoomCard;
+                if (card == null)
+                {
+                    hasValidCard = true;
+                    break;
+                }
             
                 var availablePlaces = _context.Map.GetAvailablePlacesAt(_context.Player.Position, card.Connections);
                 if (availablePlaces.Length > 0)

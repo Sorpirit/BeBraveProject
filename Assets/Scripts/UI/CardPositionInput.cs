@@ -15,8 +15,6 @@ namespace UI
         private IRoomPositionConvertor _positionConvertor;
         
         private bool _isPlacingRoom;
-        private Vector3 _cursorSpeed;
-        private readonly float _cursorSpeedAmplitude = 18;
         
         private void Awake()
         {

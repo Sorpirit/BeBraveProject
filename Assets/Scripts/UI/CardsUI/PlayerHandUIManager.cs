@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Core.CardSystem.Data;
+using Core.CardSystem.Data.Cards;
 using Core.Data;
 using Core.GameStates;
 using Game;
@@ -56,7 +58,7 @@ namespace UI.CardsUI
             }
         }
 
-        private void RemoveCard(RoomCard card, int index)
+        private void RemoveCard(ICard card, int index)
         {
             var cardUI = _cards[index];
             if(SelectedCardIndex == index)
@@ -71,15 +73,18 @@ namespace UI.CardsUI
         }
 
 
-        public void AddCard(RoomCard card)
+        public void AddCard(ICard card)
         {
+            if(card is not RoomCard roomCard)
+                throw new ArgumentException("Unsupported card type: " + card.GetType().Name);
+            
             var cardUIGO = Instantiate(cardPrefab.gameObject, handTransform);
             var cardUI = cardUIGO.GetComponent<CardUI>();
             
-            int roomIndex = (int) card.RoomId;
+            int roomIndex = (int) roomCard.RoomId;
             var sprite = roomIndex >= 1 ? cardSprites[roomIndex - 1] : null;
-            bool invertSprite = card.Connections.HasFlag(NodeConnections.Right) && !card.Connections.HasFlag(NodeConnections.Left);
-            cardUI.InitCard(_cards.Count, _roomSprites[card.Connections], invertSprite, sprite);
+            bool invertSprite = roomCard.Connections.HasFlag(NodeConnections.Right) && !roomCard.Connections.HasFlag(NodeConnections.Left);
+            cardUI.InitCard(_cards.Count, _roomSprites[roomCard.Connections], invertSprite, sprite);
             cardUI.OnCardClicked += ClickedCard;
             cardUI.OnCardDrag += DragCard;
             cardUI.OnCardDrop += DropCard;

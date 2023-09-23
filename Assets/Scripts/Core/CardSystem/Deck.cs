@@ -1,21 +1,22 @@
 using System;
 using System.Collections.Generic;
-using Core.Data.Scriptable;
+using Core.CardSystem.Data;
+using Core.Data;
 using Library.Collections;
 using UnityEngine.Assertions;
 
-namespace Core.Data
+namespace Core.CardSystem
 {
     public class Deck
     {
         public int CardCount => _deck.Count;
         public event Action<int> OnCardCountChanged;
         
-        private readonly List<RoomCard> _deck;
+        private readonly List<ICard> _deck;
         
-        public Deck(List<RoomCard> cards)
+        public Deck(List<ICard> cards)
         {
-            _deck = new List<RoomCard>(cards);
+            _deck = new List<ICard>(cards);
         }
 
         public void Shuffle()
@@ -23,7 +24,7 @@ namespace Core.Data
             _deck.Shuffle();
         }
         
-        public RoomCard TakeTop()
+        public ICard TakeTop()
         {
             Assert.IsTrue(_deck.Count > 0, "Deck is empty!");
             var result = _deck[0];
@@ -32,7 +33,7 @@ namespace Core.Data
             return result;
         }
 
-        public bool TryTakeTop(out RoomCard topPick)
+        public bool TryTakeTop(out ICard topPick)
         {
             topPick = default;
             if (CardCount <= 0)
@@ -42,7 +43,7 @@ namespace Core.Data
             return true;
         }
 
-        public void PushBottom(RoomCard card)
+        public void PushBottom(ICard card)
         {
             _deck.Add(card);
             OnCardCountChanged?.Invoke(CardCount);

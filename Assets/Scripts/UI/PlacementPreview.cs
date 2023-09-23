@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using Core.CardSystem.Data.Cards;
+using Core.Data;
 using Game;
 using Game.Data;
 using Library.Collections;
@@ -32,7 +34,11 @@ namespace UI
             if (GameRunner.Instance.Context.Hand.Cards.Count <= 0 || !cardIndex.HasValue)
                 return;
 
-            var card = GameRunner.Instance.Context.Hand.GetCard(cardIndex.Value);
+            var card = GameRunner.Instance.Context.Hand.GetCard(cardIndex.Value) as RoomCard;
+            
+            if(card == null)
+                return;
+            
             var availablePlaces =
                 GameRunner.Instance.Context.Map.GetAvailablePlacesAt(GameRunner.Instance.Context.Player.Position,
                     card.Connections);
