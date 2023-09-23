@@ -5,6 +5,7 @@ using Core.GameStates;
 using Core.RoomsSystem;
 using Scripts.DependancyInjector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game
 {
@@ -14,6 +15,7 @@ namespace Game
 
         [Inject] private IRoomFactory _roomFactory;
 
+        [SerializeField] private bool deterministic;
         [SerializeField] private CardSetSO set;
 
         private GameContext _context;
@@ -45,6 +47,11 @@ namespace Game
                 MaxPlayerHealth = 30
             };
             
+            if (deterministic)
+            {
+                Random.InitState(20031260);
+            }
+            Debug.Log("Game seed: " + Random.state);
             _context = new GameContext();
             _commander = GameStateSetup.SetupStates(gameSetup, _context);
             OnGameInitFinished?.Invoke(_context, _commander);

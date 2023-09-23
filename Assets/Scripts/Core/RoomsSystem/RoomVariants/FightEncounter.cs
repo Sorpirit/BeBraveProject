@@ -49,6 +49,8 @@ namespace Core.RoomsSystem.RoomVariants
             if(d.DamageAmount > 0)
                 _player.HealthSystem.TakeDamage(d);
             
+            _player.Inventory.Shield.Use(_player);
+            
             if (_player.HealthSystem.IsDead)
                 FinishEncounter();
             else

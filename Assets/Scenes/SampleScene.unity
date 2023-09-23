@@ -3080,11 +3080,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733ae93f392045aaa7fca12cdc281002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goldAmount: 10
-  healAmount: 5
-  trapDamageAmount: 20
-  basicSwordDamage: 6
-  basicShieldArmor: 12
+  goldAmount: 24
+  healAmount: 8
+  trapDamageAmount: 15
+  basicSwordDamage: 9
+  basicShieldArmor: 7
   itemsPrefabs:
   - {fileID: 2324741256373840752, guid: 8b90074da2417d64cace7651759ef215, type: 3}
   - {fileID: 9122899349520095738, guid: b16556f9712ac5e45b322296fdd5cb98, type: 3}
@@ -3135,8 +3135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff2350d1788430a881e104519a82fc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicEnemyMaxHp: 15
-  basicEnemyDamage: 15
+  basicEnemyMaxHp: 14
+  basicEnemyDamage: 5
   enemyPrefabs:
   - {fileID: 1166391471363487009, guid: 2d2f556c644e6b340ab3c20d0d8fb5e8, type: 3}
 --- !u!1 &1583990537
@@ -3284,6 +3284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5735476b0d1b4dbfb7a197dd13b3d04a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deterministic: 0
   set: {fileID: 11400000, guid: c5f52b1fd0ac4344b893ff16ff849212, type: 2}
 --- !u!1 &2006655362
 GameObject:

@@ -56,6 +56,8 @@ namespace UI
             _currentShield = Instantiate(_iconFactory.GetShield(shield), shieldSlot.transform);
             _shieldStats = _currentShield.GetComponent<IItemValue>();
             _shieldStats.SetItemValue(shield.Shield);
+            
+            shield.ShieldChanged += _shieldStats.SetItemValue;
         }
 
         private void UpdateWeapon(IWeapon weapon)
@@ -66,6 +68,8 @@ namespace UI
             _currentWeapon = Instantiate(_iconFactory.GetWeapon(weapon), weaponSlot.transform);
             _weaponStats = _currentWeapon.GetComponent<IItemValue>();
             _weaponStats.SetItemValue(weapon.Damage);
+            
+            weapon.DamageChanged += _weaponStats.SetItemValue;
         }
     }
 }

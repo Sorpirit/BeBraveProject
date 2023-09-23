@@ -43,3 +43,6 @@ MonoBehaviour:
   - Connections: 7
     Prefab: {fileID: 2544809625508875765, guid: 05b59a0406321ba4db8f83989bfae323, type: 3}
     Sprite: {fileID: 21300000, guid: b8fb7c70a00602147a92df5d5686b030, type: 3}
+  - Connections: 5
+    Prefab: {fileID: 2544809625508875765, guid: 05b59a0406321ba4db8f83989bfae323, type: 3}
+    Sprite: {fileID: 21300000, guid: 0a29b8eff7873de41831f3a48dfcedf9, type: 3}

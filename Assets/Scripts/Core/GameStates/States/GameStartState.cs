@@ -28,6 +28,8 @@ namespace Core.GameStates.States
             var hand = new PlayerHand(_setup.MaxCardsInHand);
             var player = new PlayerPawn(new StandardHealthSystem(_setup.MaxPlayerHealth));
 
+            deck.Shuffle();
+            
             _context.InitContext(deck, map, hand, player, _setup.RoomFactory);
             
             var startRoom = _context.Map.InitRoom(Vector2Int.zero);
