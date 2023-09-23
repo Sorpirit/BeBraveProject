@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TrapRooRLU
   m_EditorClassIdentifier: 
   description: {fileID: 0}
-  roomId: 5
+  roomId: 7
   connections: 11

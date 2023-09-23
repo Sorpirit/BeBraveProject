@@ -17,6 +17,13 @@ namespace Game.RoomFactories
         [SerializeField] private int basicSwordDamage;
         [SerializeField] private int basicShieldArmor;
         
+        [SerializeField] private int sacrificeDaggerDamage;
+        [SerializeField] private int sacrificeDaggerDamageToPlayer;
+        
+        [SerializeField] private int vampireDaggerDamage;
+        [SerializeField] private float vampireDaggerHealChance = .4f;
+        [SerializeField] private int vampireDaggerHealAmount;
+        
         [SerializeField] private List<GameObject> itemsPrefabs;
         
         [Inject] 
@@ -32,6 +39,8 @@ namespace Game.RoomFactories
             _roomFactory.AddFactory(RoomId.SimpleSword, this);
             _roomFactory.AddFactory(RoomId.SimpleShield, this);
             _roomFactory.AddFactory(RoomId.BasicTrap, this);
+            _roomFactory.AddFactory(RoomId.SacrificeDagger, this);
+            _roomFactory.AddFactory(RoomId.VampireDagger, this);
         }
         
         public IRoomContent CreateRoom(RoomId id, GameObject parentTile)
@@ -65,6 +74,19 @@ namespace Game.RoomFactories
                     
                     itemGO.GetComponent<IItemValue>().SetItemValue(shield.Shield);
                     roomContent = new ItemRoomContent(new PickUpAbleItem(shield));
+                    break;
+                
+                case RoomId.SacrificeDagger:
+                    var sDagger = new SacrificeDagger(sacrificeDaggerDamage, sacrificeDaggerDamageToPlayer);
+                    
+                    itemGO.GetComponent<IItemValue>().SetItemValue(sDagger.Damage);
+                    roomContent = new ItemRoomContent(new PickUpAbleItem(sDagger));
+                    break;
+                case RoomId.VampireDagger:
+                    var vDagger = new VampireDagger(vampireDaggerDamage, vampireDaggerHealChance, vampireDaggerHealAmount);
+                    
+                    itemGO.GetComponent<IItemValue>().SetItemValue(vDagger.Damage);
+                    roomContent = new ItemRoomContent(new PickUpAbleItem(vDagger));
                     break;
                 
                 default:

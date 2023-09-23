@@ -46,7 +46,7 @@ namespace Game
             {
                 CardSet = set,
                 RoomFactory = _roomFactory,
-                MaxCardsInHand = 3,
+                MaxCardsInHand = 5,
                 MaxPlayerHealth = 30
             };
             

@@ -38,8 +38,8 @@ namespace Core.RoomsSystem.RoomVariants
             var d = new DamageInfo(_player.Inventory.Weapon.Damage);
             _enemy.Health.TakeDamage(d);
             _player.Inventory.Weapon.Use(_player);
-
-            if (_isEnemyDead)
+            
+            if (_isEnemyDead || _player.HealthSystem.IsDead)
             {
                 FinishEncounter();
                 return;

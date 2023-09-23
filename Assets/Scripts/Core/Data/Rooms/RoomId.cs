@@ -11,8 +11,10 @@ namespace Core.Data.Rooms
         Coin,
         HealthPotion,
         SimpleSword,
+        SacrificeDagger,
+        VampireDagger,
         SimpleShield,
-        
+
         //Trap
         BasicTrap,
         

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: EnemyRooRLUD
   m_EditorClassIdentifier: 
   description: {fileID: 0}
-  roomId: 6
+  roomId: 8
   connections: -1

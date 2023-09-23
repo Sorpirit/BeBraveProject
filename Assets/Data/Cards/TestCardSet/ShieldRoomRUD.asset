@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ShieldRoomRUD
   m_EditorClassIdentifier: 
   description: {fileID: 0}
-  roomId: 4
+  roomId: 6
   connections: 7

@@ -2,6 +2,7 @@ using Core.GameStates;
 using Game;
 using UI.CardsUI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UI
 {
@@ -44,12 +45,20 @@ namespace UI
         {
             if (Input.GetKeyDown(KeyCode.Space) && !GameRunner.Instance.Context.IsGameStarted)
                 StartGame();
+            
+            if (Input.GetKeyDown(KeyCode.R) && GameRunner.Instance.Context.IsGameStarted)
+                RestartGame();
         }
 
         public void StartGame()
         {
             startGamePanel.SetActive(false);
             GameRunner.Instance.StartGame();
+        }
+        
+        public void RestartGame()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

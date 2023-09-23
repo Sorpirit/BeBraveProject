@@ -8,6 +8,8 @@ namespace UI
     public class BasicIconFactory : MonoBehaviour, IItemIconFactory
     {
         [SerializeField] private GameObject basicSwordPrefab;
+        [SerializeField] private GameObject vampireDaggerPrefab;
+        [SerializeField] private GameObject sacrificeDaggerPrefab;
         [SerializeField] private GameObject basicShieldPrefab;
         
         public GameObject GetWeapon(IWeapon weapon)
@@ -16,6 +18,12 @@ namespace UI
             {
                 case BasicSword:
                     return basicSwordPrefab;
+                
+                case VampireDagger:
+                    return vampireDaggerPrefab;
+                
+                case SacrificeDagger:
+                    return sacrificeDaggerPrefab;
                 
                 default:
                     throw new ArgumentOutOfRangeException("Inappropriate weapon type");
