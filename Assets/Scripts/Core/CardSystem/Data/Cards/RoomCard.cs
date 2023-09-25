@@ -1,25 +1,22 @@
+using Core.CardSystem.Data.CardDescriptors;
 using Core.Data.Rooms;
 using Library.Collections;
-using UnityEngine;
 
 namespace Core.CardSystem.Data.Cards
 {
-    [CreateAssetMenu(fileName = "NewRoomCard", menuName = "Core/CardSystem/CardSet")]
-    public class RoomCard : CardSO
+    public class RoomCard : ICard
     {
-        [SerializeField] private RoomId roomId;
-        [SerializeField] private NodeConnections connections;
+        public RoomId RoomId => _roomId;
+        public NodeConnections Connections => _connections.ClampRange();
+        public ICardDescription Description => EmptyDescription.Instance;
 
-        public RoomId RoomId => roomId;
-
-        public NodeConnections Connections => connections.ClampRange();
-
-        public RoomCard() { }
-
+        private RoomId _roomId;
+        private NodeConnections _connections;
+        
         public RoomCard(RoomId roomId, NodeConnections connections)
         {
-            this.roomId = roomId;
-            this.connections = connections;
+            _roomId = roomId;
+            _connections = connections;
         }
 
         public override string ToString()

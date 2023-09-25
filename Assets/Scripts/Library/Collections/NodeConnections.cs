@@ -11,6 +11,8 @@ namespace Library.Collections
         Down = 4,
         Left = 8,
         
-        All = Up | Right | Down | Left
+        All = Up | Right | Down | Left,
+        Vertical = Up | Down,
+        Horizontal = Right | Left,
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Core.CardSystem.Data;
-using Core.Data;
 using Library.Collections;
 using UnityEngine.Assertions;
 

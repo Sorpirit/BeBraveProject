@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Core.CardSystem.Data
@@ -7,8 +6,20 @@ namespace Core.CardSystem.Data
     [CreateAssetMenu(fileName = "NewCardSet", menuName = "Core/CardSystem/CardSet")]
     public class CardSetSO : ScriptableObject
     {
-        [SerializeField] private List<CardSO> cards;
+        [SerializeField] private List<CardPreset> cards;
 
-        public List<ICard> Cards => cards.Cast<ICard>().ToList();
+        public List<ICard> Cards
+        {
+            get
+            {
+                var result = new List<ICard>();
+                foreach (var card in cards)
+                {
+                    result.AddRange(card.ReadPreset());
+                }
+
+                return result;
+            }
+        }
     }
 }
