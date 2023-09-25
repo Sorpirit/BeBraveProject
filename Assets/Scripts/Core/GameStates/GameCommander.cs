@@ -34,6 +34,7 @@ namespace Core.GameStates
         public void ChangeState(IState state)
         {
             Assert.IsTrue(_currentState != state);
+            Assert.IsNotNull(state);
             _currentState?.ExitState();
             _currentState = state;
             _currentState.EnterState();

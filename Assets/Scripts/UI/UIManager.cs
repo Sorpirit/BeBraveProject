@@ -11,9 +11,11 @@ namespace UI
         [SerializeField] private PlacementPreview _placementPreview;
         [SerializeField] private PlayerHandUIManager _playerHandUIManager;
         [SerializeField] private GameObject startGamePanel;
-        [SerializeField] private GameObject gameOverPanel;
         
-        
+        [SerializeField] private GameObject playerWonPanel;
+        [SerializeField] private GameObject playerDiedPanel;
+
+
         private void Awake()
         {
             GameRunner.Instance.OnGameInitFinished += GameInitFinished;
@@ -28,10 +30,17 @@ namespace UI
             commander.PlaceRoomState.OnStateEnter += () => commander.PlaceRoomState.Trigger();
             commander.GameStartState.OnStateEnter += GameStart;
 
-            gameOverPanel.SetActive(false);
+            playerWonPanel.SetActive(false);
+            playerDiedPanel.SetActive(false);
             startGamePanel.SetActive(true);
             
-            commander.FinishGame.OnStateEnter += () => gameOverPanel.SetActive(true);
+            commander.FinishGame.OnStateEnter += () =>
+            {
+                if (context.Player.HealthSystem.IsDead)
+                    playerDiedPanel.SetActive(true);
+                else
+                    playerWonPanel.SetActive(true);
+            };
         }
 
         private void GameStart()

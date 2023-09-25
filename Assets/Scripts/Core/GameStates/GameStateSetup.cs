@@ -27,6 +27,7 @@ namespace Core.GameStates
             checkCardsValid.DropCardState = dropCardState;
             
             takeCardState.NextState = checkCardsValid;
+            takeCardState.FinishGame = gameFinishState;
             dropCardState.NextState = takeCardState;
             
             playCardState.NextState = placeRoomState;
