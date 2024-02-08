@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7d481049b646e283d6abfcfa2f224d, type: 3}
   m_Name: HealthRoomPreset
   m_EditorClassIdentifier: 
+  description: {fileID: 11400000, guid: 5e7440950f38bb946a8e65b8ed3589ad, type: 2}
   roomId: 2
   variants:
   - Connections: 7

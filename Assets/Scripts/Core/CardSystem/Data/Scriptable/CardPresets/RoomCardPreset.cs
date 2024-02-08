@@ -10,6 +10,7 @@ namespace Core.CardSystem.Data.Scriptable.CardPresets
     [CreateAssetMenu(menuName = "Core/CardSystem/CardPreset/RoomCardPreset", fileName = "NewRoomCardPreset")]
     public class RoomCardPreset : CardPreset
     {
+        [SerializeField] private CardDescriptionSO description;
         [SerializeField] private RoomId roomId;
         [SerializeField] private List<RoomVariant> variants;
         
@@ -25,7 +26,7 @@ namespace Core.CardSystem.Data.Scriptable.CardPresets
             List<ICard> result = new List<ICard>(variants.Count);
             foreach (var variant in variants)
             {
-                var roomCard = new RoomCard(roomId, variant.Connections);
+                var roomCard = new RoomCard(roomId, variant.Connections, description);
                 for (int i = 0; i < variant.CardCount; i++)
                 {
                     result.Add(roomCard);

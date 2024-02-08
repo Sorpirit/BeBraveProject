@@ -31,6 +31,11 @@ namespace Tests.CoreTest.Data
             var sword = new BasicSword(10);
             sword.Use(player);
             Assert.AreEqual(9, sword.Damage);
+            
+            var swordFlat = new BasicSword(1);
+            swordFlat.Use(player);
+            swordFlat.Use(player);
+            Assert.AreEqual(1, swordFlat.Damage);
         }
 
         [Test]
@@ -40,6 +45,10 @@ namespace Tests.CoreTest.Data
             var shield = new BasicShield(10);
             shield.Use(player);
             Assert.AreEqual(9, shield.Shield);
+            var shieldFlat = new BasicShield(1);
+            shieldFlat.Use(player);
+            shieldFlat.Use(player);
+            Assert.AreEqual(0, shieldFlat.Shield);
         }
         
         [Test]

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7d481049b646e283d6abfcfa2f224d, type: 3}
   m_Name: TrapRoomPreset
   m_EditorClassIdentifier: 
+  description: {fileID: 11400000, guid: 83a24e0e18d19704093130bacdff741f, type: 2}
   roomId: 7
   variants:
   - Connections: -1

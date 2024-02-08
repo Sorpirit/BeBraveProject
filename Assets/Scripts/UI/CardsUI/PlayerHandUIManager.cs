@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Core.CardSystem.Data;
+using Core.CardSystem.Data.CardDescriptors;
 using Core.CardSystem.Data.Cards;
 using Core.Data;
 using Core.GameStates;
@@ -84,7 +85,9 @@ namespace UI.CardsUI
             int roomIndex = (int) roomCard.RoomId;
             var sprite = roomIndex >= 1 ? cardSprites[roomIndex - 1] : null;
             bool invertSprite = roomCard.Connections.HasFlag(NodeConnections.Right) && !roomCard.Connections.HasFlag(NodeConnections.Left);
-            cardUI.InitCard(_cards.Count, _roomSprites[roomCard.Connections], invertSprite, sprite);
+            float? value = GetValue(roomCard.Description);
+            
+            cardUI.InitCard(_cards.Count, _roomSprites[roomCard.Connections], invertSprite, sprite, value);
             cardUI.OnCardClicked += ClickedCard;
             cardUI.OnCardDrag += DragCard;
             cardUI.OnCardDrop += DropCard;
@@ -126,6 +129,32 @@ namespace UI.CardsUI
             }
             
             OnSelectionChanged?.Invoke(SelectedCardIndex);
+        }
+        
+        private float? GetValue(ICardDescription description)
+        {
+            switch (description)
+            {
+                case HealingPotionCardDescriptionSO healingPotionCardDescription:
+                    return healingPotionCardDescription.HealingAmount;
+                
+                case SwordCardDescriptionSO swordCardDescription:
+                    return swordCardDescription.DamageAmount;
+                
+                case ShieldCardDescriptionSO shieldCardDescription:
+                    return shieldCardDescription.Shield;
+                
+                case TrapCardDescriptionSO trapCardDescription:
+                    return trapCardDescription.DamageAmount;
+                
+                case EnemyCardDescriptionSO enemyCardDescription:
+                    return enemyCardDescription.Health;
+                
+                case CoinCardDescriptionSO coinCardDescription:
+                    return coinCardDescription.CoinAmount;
+            }
+            
+            return null;
         }
     }
 }

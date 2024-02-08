@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
@@ -13,6 +14,8 @@ namespace UI.CardsUI
         [SerializeField] private Color selectedColor;
         [SerializeField] private Color unselectedColor;
 
+        [SerializeField] private TMP_Text valueText;
+        
         public int Index { get; private set; }
         
         public event Action<CardUI, PointerEventData> OnCardClicked;
@@ -56,7 +59,7 @@ namespace UI.CardsUI
             _originalPosition = transform.position;
         }
 
-        public void InitCard(int cardIndex, Sprite roomSprite, bool inverseRoomSprite, [CanBeNull] Sprite contentSprite)
+        public void InitCard(int cardIndex, Sprite roomSprite, bool inverseRoomSprite, [CanBeNull] Sprite contentSprite, float? value = null)
         {
             Index = cardIndex;
             image.sprite = roomSprite;
@@ -72,6 +75,12 @@ namespace UI.CardsUI
             {
                 iconImage.sprite = contentSprite;
                 iconImage.color = Color.black;
+            }
+
+            if (value.HasValue)
+            {
+                valueText.gameObject.SetActive(true);
+                valueText.text = value.Value.ToString();
             }
         }
         

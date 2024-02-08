@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
-using Core.Data.Rooms;
+using Core.CardSystem.Data;
+using Core.CardSystem.Data.CardDescriptors;
+using Core.Data.Items;
 using Core.RoomsSystem;
 using Core.RoomsSystem.RoomVariants;
 using Scripts.DependancyInjector;
 using UnityEngine;
 using UnityEngine.Assertions;
+using Random = UnityEngine.Random;
 
 namespace Game.RoomFactories
 {
-    public class FightingEncounterFactory : MonoBehaviour, IRoomContentFactory, IFightCallbacks, IRoomContentCallBack<FightEncounterContext>
+    public class FightingEncounterFactory : MonoBehaviour, IRoomContentFactory<EnemyCardDescriptionSO>, IFightCallbacks, IRoomContentCallBack<FightEncounterContext>
     {
-        [SerializeField] private int basicEnemyMaxHp = 15;
-        [SerializeField] private int basicEnemyDamage = 15;
-        
-        [SerializeField] private List<GameObject> enemyPrefabs;
-        
         [Inject] 
         private IFactoryAggregator _roomFactory;
         
@@ -27,40 +25,7 @@ namespace Game.RoomFactories
         
         private void Start()
         {
-            _roomFactory.AddFactory(RoomId.BasicEnemy, this);
-        }
-        
-        public IRoomContent CreateRoom(RoomId id, GameObject parentTile)
-        {
-            int enemyIndex = (int)id - (int) RoomId.BasicEnemy;
-            var enemyGO = Instantiate(enemyPrefabs[enemyIndex], parentTile.transform);
-            var enemyValues = enemyGO.GetComponent<IEnemyValues>();
-            IRoomContent roomContent;
-            switch (id)
-            {
-                case RoomId.BasicEnemy:
-                    var enemy = new BasicEnemy(basicEnemyMaxHp, basicEnemyDamage);
-                    var encounter = new FightEncounter(enemy);
-                    _currentFight = encounter;
-                    roomContent = encounter;
-                    encounter.OnFightRoundFinished += TriggerFightRound;
-                    encounter.OnEncounterFinished += TriggerFinishEncounter;
-                    
-                    enemyValues.
-                        SetDamage(enemy.Weapon.Damage);
-                    enemyValues.SetHealth(enemy.Health.Health);
-                    
-                    enemy.Weapon.DamageChanged += enemyValues.SetDamage;
-                    enemy.Health.OnHealthChanged += enemyValues.SetHealth;
-                    
-                    break;
-                
-                default:
-                    throw new AggregateException("Factory unable to process room id: " + id);
-            }
-
-            OnRoomContentCreated?.Invoke(new FightEncounterContext(enemyGO));
-            return roomContent;
+            _roomFactory.AddFactory(this);
         }
         
         public void TriggerRound()
@@ -82,6 +47,31 @@ namespace Game.RoomFactories
             _currentFight.OnFightRoundFinished -= TriggerFightRound;
             _currentFight.OnEncounterFinished -= TriggerFinishEncounter;
             _currentFight = null;
+        }
+
+        public IRoomContent CreateRoom(EnemyCardDescriptionSO description, GameObject parentTile)
+        {
+            var enemyGO = Instantiate(description.Prefab, parentTile.transform);
+            var enemyValues = enemyGO.GetComponent<IEnemyValues>();
+                    
+            var enemy = new BasicEnemy(description.Health, description.Damage);
+            
+            int coinReward = Random.Range(description.CoinRewardRange.x, description.CoinRewardRange.y);
+            List<IItem> loot = new List<IItem> {new Coins(coinReward)};
+            var encounter = new FightEncounter(enemy, loot);
+            
+            _currentFight = encounter;
+            encounter.OnFightRoundFinished += TriggerFightRound;
+            encounter.OnEncounterFinished += TriggerFinishEncounter;
+                    
+            enemyValues.
+                SetDamage(enemy.Weapon.Damage);
+            enemyValues.SetHealth(enemy.Health.Health);
+                    
+            enemy.Weapon.DamageChanged += enemyValues.SetDamage;
+            enemy.Health.OnHealthChanged += enemyValues.SetHealth;
+            OnRoomContentCreated?.Invoke(new FightEncounterContext(enemyGO));
+            return encounter;
         }
     }
 }

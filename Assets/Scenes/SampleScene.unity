@@ -1563,24 +1563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 733ae93f392045aaa7fca12cdc281002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goldAmount: 24
-  healAmount: 10
-  trapDamageAmount: 12
-  basicSwordDamage: 7
-  basicShieldArmor: 6
-  sacrificeDaggerDamage: 10
-  sacrificeDaggerDamageToPlayer: 4
-  vampireDaggerDamage: 9
-  vampireDaggerHealChance: 0.4
-  vampireDaggerHealAmount: 7
-  itemsPrefabs:
-  - {fileID: 2324741256373840752, guid: 8b90074da2417d64cace7651759ef215, type: 3}
-  - {fileID: 9122899349520095738, guid: b16556f9712ac5e45b322296fdd5cb98, type: 3}
-  - {fileID: 1762381277261331444, guid: d48057572ce3675498fc0eb87a560f9e, type: 3}
-  - {fileID: 1762381277261331444, guid: f50a42563301d6f4b8ae45e0694daf93, type: 3}
-  - {fileID: 1762381277261331444, guid: 6a5833634a542f44f8f9d3dbbc3396e2, type: 3}
-  - {fileID: 1881338120556527894, guid: f3922f7624da98b48b317ac9dbb426c8, type: 3}
-  - {fileID: 8806961548742611994, guid: c60f415770021d546ba29625b2d41504, type: 3}
 --- !u!114 &1482397338 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2846792523070955950, guid: 351f9a207f576be499c9c3a5c0a90da8, type: 3}
@@ -1647,10 +1629,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ff2350d1788430a881e104519a82fc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  basicEnemyMaxHp: 14
-  basicEnemyDamage: 5
-  enemyPrefabs:
-  - {fileID: 1166391471363487009, guid: 2d2f556c644e6b340ab3c20d0d8fb5e8, type: 3}
 --- !u!224 &1578632596 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8620531349710147033, guid: 0a27ac8034bc7934c9651668526ac986, type: 3}

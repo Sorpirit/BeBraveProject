@@ -1,4 +1,5 @@
 using Core.CardSystem;
+using Core.CardSystem.Data.CardDescriptors;
 using Core.Data;
 using Core.Data.Rooms;
 using Core.Data.Scriptable;
@@ -33,7 +34,7 @@ namespace Core.GameStates.States
             _context.InitContext(deck, map, hand, player, _setup.RoomFactory);
             
             var startRoom = _context.Map.InitRoom(Vector2Int.zero);
-            var startContentRoom = _context.RoomFactory.CreateRoom(RoomId.Empty, startRoom);
+            var startContentRoom = _context.RoomFactory.CreateRoom(EmptyDescription.Instance, startRoom);
             _context.CurrentRoom = startRoom;
             _context.CurrentRoomContent = startContentRoom;
             

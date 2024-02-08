@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7d481049b646e283d6abfcfa2f224d, type: 3}
   m_Name: SwordRoomPreset
   m_EditorClassIdentifier: 
+  description: {fileID: 11400000, guid: 3d15e37c19d6d944e90548889b13954c, type: 2}
   roomId: 3
   variants:
   - Connections: 5

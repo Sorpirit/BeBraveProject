@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
+using Core.Data.Items;
 using Core.PlayerSystems;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -12,12 +15,15 @@ namespace Core.RoomsSystem.RoomVariants
         private bool _isEnemyDead = false;
         private bool _roundRunning = false;
         
+        [CanBeNull] private readonly List<IItem> _loot;
+        
         public event Action OnFightRoundFinished;
         public event Action OnEncounterFinished;
         
-        public FightEncounter(IEnemy enemy)
+        public FightEncounter(IEnemy enemy, List<IItem> loot = null)
         {
             _enemy = enemy;
+            _loot = loot;
             _enemy.Health.OnDied += () => _isEnemyDead = true;
         }
         
@@ -60,6 +66,14 @@ namespace Core.RoomsSystem.RoomVariants
         private void FinishEncounter()
         {
             _roundRunning = false;
+            if (_isEnemyDead && _loot != null)
+            {
+                foreach (var item in _loot)
+                {
+                    item.Use(_player);
+                }
+            }
+            
             OnEncounterFinished?.Invoke();
         }
 

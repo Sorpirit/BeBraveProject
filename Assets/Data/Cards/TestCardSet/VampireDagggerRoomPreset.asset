@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7d481049b646e283d6abfcfa2f224d, type: 3}
   m_Name: VampireDagggerRoomPreset
   m_EditorClassIdentifier: 
+  description: {fileID: 11400000, guid: e76320dc654b9cd49be4d3c43d77580c, type: 2}
   roomId: 5
   variants:
   - Connections: 14

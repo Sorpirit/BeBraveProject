@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Core.CardSystem.Data;
+using Core.CardSystem.Data.CardDescriptors;
 using Core.Data.Rooms;
 using Core.RoomsSystem;
 using Core.RoomsSystem.RoomVariants;
@@ -20,7 +22,7 @@ namespace Game.RoomFactories
         
         public event Action<EmptyRoomContext> OnRoomContentCreated;
         
-        private readonly Dictionary<RoomId, IRoomContentFactory> _factories = new();
+        private readonly Dictionary<Type, Func<ICardDescription, GameObject, IRoomContent>> _factories = new();
         private Dictionary<NodeConnections, GameObject> _roomPrefabs;
         
         private void Start()
@@ -28,29 +30,38 @@ namespace Game.RoomFactories
             _roomPrefabs = roomOrientationSetup.RoomPrefabs;
         }
 
-        public IRoomContent CreateRoom(RoomId id, Room room)
+        public IRoomContent CreateRoom(ICardDescription roomDescription, Room room)
         {
             var position = _positionConvertor.TileToWorld(room.Position);
             var tile = Instantiate(_roomPrefabs[room.Connections], position, Quaternion.identity);
+            var type = roomDescription.GetType();
 
-            if (id == RoomId.Empty)
+            if (type == typeof(EmptyDescription))
             {
                 OnRoomContentCreated?.Invoke(new EmptyRoomContext());
                 return new EmptyRoomContent();
             }
-                
-
-            if (_factories.TryGetValue(id, out var factory))
-                return factory.CreateRoom(id, tile);
+            
+            if (_factories.TryGetValue(type, out var factoryFunction))
+                return factoryFunction(roomDescription, tile);
             
             throw new ArgumentException("Unknown room id");
         }
 
-        public void AddFactory(RoomId id, IRoomContentFactory factory)
+        public void AddFactory<T>(IRoomContentFactory<T> factory) where T : ICardDescription
         {
-            Assert.IsFalse(id == RoomId.Empty);
-            Assert.IsFalse(_factories.ContainsKey(id));
-            _factories.Add(id, factory);
+            var type = typeof(T);
+            Assert.IsFalse(type == typeof(EmptyDescription));
+            Assert.IsFalse(_factories.ContainsKey(type));
+            _factories.Add(type, (description, room) => factory.CreateRoom((T) description, room));
+        }
+
+        public void AddFactory<T>(Func<T, GameObject, IRoomContent> factory) where T : ICardDescription
+        {
+            var type = typeof(T);
+            Assert.IsFalse(type == typeof(EmptyDescription));
+            Assert.IsFalse(_factories.ContainsKey(type));
+            _factories.Add(type, (description, room) => factory((T) description, room));
         }
     }
 

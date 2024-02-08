@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcc9b59aeab34eb89ee8ae28a1818b3a, type: 3}
+  m_Name: SwordCardDescriptionSO
+  m_EditorClassIdentifier: 
+  cardName: Bassic Sword
+  cardDescription: 
+  prefab: {fileID: 1762381277261331444, guid: d48057572ce3675498fc0eb87a560f9e, type: 3}
+  sprite: {fileID: 21300000, guid: 8c179c8d46b400342bcbbd8518e83a9a, type: 3}
+  damageAmount: 7
